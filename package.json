@@ -1,0 +1,21 @@
+{
+  "name": "acts29ministry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A nationwide web platform to help solve the homeless crisis while proclaiming the Good News",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.3.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

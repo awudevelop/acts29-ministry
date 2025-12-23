@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminLayout } from '@acts29/admin-ui';
+import { ErrorBoundary } from '../../components';
 
 // Demo user data - no auth required
 const demoUser = {
@@ -32,7 +33,7 @@ export default function AdminDashboardLayout({
       organizationName={demoOrganization}
       onSignOut={handleSignOut}
     >
-      {children}
+      <ErrorBoundary>{children}</ErrorBoundary>
     </AdminLayout>
   );
 }

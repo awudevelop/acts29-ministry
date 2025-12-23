@@ -31,8 +31,9 @@ export function TopBar({ user, organizationName, onMenuClick, showSearch = true 
         <button
           onClick={onMenuClick}
           className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+          aria-label="Open navigation menu"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
 
         {/* Search */}
@@ -63,9 +64,12 @@ export function TopBar({ user, organizationName, onMenuClick, showSearch = true 
           )}
 
           {/* Notifications */}
-          <button className="relative p-2 rounded-lg hover:bg-gray-100">
-            <Bell className="h-5 w-5 text-gray-600" />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" />
+          <button
+            className="relative p-2 rounded-lg hover:bg-gray-100"
+            aria-label="View notifications"
+          >
+            <Bell className="h-5 w-5 text-gray-600" aria-hidden="true" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500" aria-label="New notifications" />
           </button>
 
           {/* User menu */}
@@ -73,11 +77,14 @@ export function TopBar({ user, organizationName, onMenuClick, showSearch = true 
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
               className="flex items-center gap-2 rounded-lg p-1 hover:bg-gray-100"
+              aria-label="Open user menu"
+              aria-expanded={showUserMenu}
+              aria-haspopup="true"
             >
               {user?.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
-                  alt=""
+                  alt={`${user?.firstName || ''} ${user?.lastName || ''}`}
                   className="h-8 w-8 rounded-full object-cover"
                 />
               ) : (

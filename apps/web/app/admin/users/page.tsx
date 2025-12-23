@@ -120,19 +120,19 @@ export default function UsersPage() {
               router.push(`/admin/users/${info.row.original.id}`);
             }}
             className="p-1 text-gray-400 hover:text-gray-600"
-            title="View"
+            aria-label={`View ${info.row.original.first_name} ${info.row.original.last_name}`}
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="h-4 w-4" aria-hidden="true" />
           </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              // Edit user
+              router.push(`/admin/users/${info.row.original.id}/edit`);
             }}
             className="p-1 text-gray-400 hover:text-gray-600"
-            title="Edit"
+            aria-label={`Edit ${info.row.original.first_name} ${info.row.original.last_name}`}
           >
-            <Edit className="h-4 w-4" />
+            <Edit className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
       ),
@@ -171,8 +171,12 @@ export default function UsersPage() {
       <div className="flex flex-wrap gap-4 rounded-lg border bg-white p-4">
         <div className="flex-1 min-w-[200px]">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+            <label htmlFor="user-search" className="sr-only">
+              Search users
+            </label>
             <input
+              id="user-search"
               type="text"
               placeholder="Search users..."
               value={searchQuery}

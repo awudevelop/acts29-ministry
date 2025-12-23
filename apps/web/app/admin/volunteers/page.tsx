@@ -35,14 +35,27 @@ export default function VolunteersPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const pageSize = 10;
 
-  // Get volunteers from profiles
-  const volunteers = mockProfiles
-    .filter((p) => p.role === 'volunteer' || p.role === 'staff')
-    .map((p) => ({
-      ...p,
-      totalHours: Math.floor(Math.random() * 100) + 10, // Demo data
-      shiftsCompleted: Math.floor(Math.random() * 20) + 1,
-    }));
+  // Get volunteers from profiles with stable demo data
+  // Using a simple hash of the ID to generate consistent values
+  const volunteers = React.useMemo(() => {
+    const hashCode = (str: string) => {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    };
+
+    return mockProfiles
+      .filter((p) => p.role === 'volunteer' || p.role === 'staff')
+      .map((p) => ({
+        ...p,
+        totalHours: (hashCode(p.id) % 100) + 10,
+        shiftsCompleted: (hashCode(p.id + 'shifts') % 20) + 1,
+      }));
+  }, []);
 
   // Filter volunteers
   const filteredVolunteers = React.useMemo(() => {
@@ -119,8 +132,9 @@ export default function VolunteersPage() {
             e.stopPropagation();
             router.push(`/admin/volunteers/${info.row.original.id}`);
           }}
+          aria-label={`View ${info.row.original.first_name} ${info.row.original.last_name}`}
         >
-          <Eye className="h-4 w-4" />
+          <Eye className="h-4 w-4" aria-hidden="true" />
         </Button>
       ),
     }),
@@ -182,8 +196,12 @@ export default function VolunteersPage() {
       <div className="flex gap-4 rounded-lg border bg-white p-4">
         <div className="flex-1">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+            <label htmlFor="volunteer-search" className="sr-only">
+              Search volunteers
+            </label>
             <input
+              id="volunteer-search"
               type="text"
               placeholder="Search volunteers by name or phone..."
               value={searchQuery}
@@ -192,8 +210,8 @@ export default function VolunteersPage() {
             />
           </div>
         </div>
-        <Button variant="outline">
-          <Download className="mr-2 h-4 w-4" />
+        <Button variant="outline" aria-label="Export volunteers list">
+          <Download className="mr-2 h-4 w-4" aria-hidden="true" />
           Export
         </Button>
       </div>

@@ -16,7 +16,7 @@ import {
   Briefcase,
   Heart,
 } from 'lucide-react';
-import { DEMO_USERS, type DemoUser, getRoleDisplayName, getRoleColor } from '@/lib/auth';
+import { DEMO_USERS, type DemoUser, getRoleDisplayName, getRoleColor, useAuth } from '@/lib/auth';
 
 // Icon mapping for roles
 const roleIcons = {
@@ -30,6 +30,7 @@ export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') ?? '/admin';
+  const { login, loginAsUser, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -38,21 +39,21 @@ export default function LoginPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [selectedUser, setSelectedUser] = React.useState<DemoUser | null>(null);
 
+  // Redirect if already authenticated
+  React.useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      router.push(redirect);
+    }
+  }, [authLoading, isAuthenticated, redirect, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
     try {
-      // Find matching demo user
-      const matchedUser = DEMO_USERS.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-      );
-
-      if (matchedUser) {
-        // Store user in localStorage for demo purposes
-        localStorage.setItem('acts29_auth_user', JSON.stringify(matchedUser));
-        await new Promise((resolve) => setTimeout(resolve, 300));
+      const success = await login(email, password);
+      if (success) {
         router.push(redirect);
       } else {
         setError('Invalid email or password. Try one of the demo accounts below.');
@@ -71,10 +72,9 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Store user in localStorage for demo purposes
-      localStorage.setItem('acts29_auth_user', JSON.stringify(user));
+      loginAsUser(user);
       await new Promise((resolve) => setTimeout(resolve, 300));
-      router.push('/admin');
+      router.push(redirect);
     } catch {
       setError('An error occurred.');
     } finally {
@@ -82,6 +82,27 @@ export default function LoginPage() {
       setSelectedUser(null);
     }
   };
+
+  // Show loading while checking auth state
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+      </div>
+    );
+  }
+
+  // Don't show login form if already authenticated (will redirect)
+  if (isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4" />
+          <p className="text-gray-600">Redirecting to admin portal...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

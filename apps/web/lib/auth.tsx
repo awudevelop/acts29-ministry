@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
 
 // Demo users with credentials
 export const DEMO_USERS = [
@@ -76,25 +75,34 @@ const AUTH_STORAGE_KEY = 'acts29_auth_user';
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<DemoUser | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
-  const router = useRouter();
+  const [mounted, setMounted] = React.useState(false);
+
+  // Handle hydration - only access localStorage after mount
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Load user from localStorage on mount
   React.useEffect(() => {
-    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (stored) {
-      try {
+    if (!mounted) return;
+
+    try {
+      const stored = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (stored) {
         const parsed = JSON.parse(stored);
         // Verify it's a valid demo user
         const demoUser = DEMO_USERS.find((u) => u.id === parsed.id);
         if (demoUser) {
           setUser(demoUser);
+        } else {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
         }
-      } catch {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
       }
+    } catch {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
     }
     setIsLoading(false);
-  }, []);
+  }, [mounted]);
 
   const login = React.useCallback(async (email: string, password: string): Promise<boolean> => {
     // Find matching demo user
@@ -103,8 +111,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     if (matchedUser) {
-      setUser(matchedUser);
       localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(matchedUser));
+      setUser(matchedUser);
       return true;
     }
 
@@ -112,15 +120,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const loginAsUser = React.useCallback((demoUser: DemoUser) => {
-    setUser(demoUser);
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(demoUser));
+    setUser(demoUser);
   }, []);
 
   const logout = React.useCallback(() => {
-    setUser(null);
     localStorage.removeItem(AUTH_STORAGE_KEY);
-    router.push('/login');
-  }, [router]);
+    setUser(null);
+    // Navigation is handled by the component calling logout
+  }, []);
 
   const value = React.useMemo(
     () => ({

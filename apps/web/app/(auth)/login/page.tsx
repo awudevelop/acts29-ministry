@@ -39,12 +39,16 @@ export default function LoginPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [selectedUser, setSelectedUser] = React.useState<DemoUser | null>(null);
 
-  // Redirect if already authenticated
+  // Track if we've triggered navigation to prevent loops
+  const [navigating, setNavigating] = React.useState(false);
+
+  // Redirect if already authenticated (on initial load)
   React.useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      router.push(redirect);
+    if (!authLoading && isAuthenticated && !navigating) {
+      setNavigating(true);
+      router.replace(redirect);
     }
-  }, [authLoading, isAuthenticated, redirect, router]);
+  }, [authLoading, isAuthenticated, redirect, router, navigating]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +58,9 @@ export default function LoginPage() {
     try {
       const success = await login(email, password);
       if (success) {
-        router.push(redirect);
+        setNavigating(true);
+        // Use replace to prevent back button returning to login
+        router.replace(redirect);
       } else {
         setError('Invalid email or password. Try one of the demo accounts below.');
       }
@@ -70,24 +76,32 @@ export default function LoginPage() {
     setEmail(user.email);
     setPassword(user.password);
     setIsLoading(true);
+    setError(null);
 
     try {
       loginAsUser(user);
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      router.push(redirect);
+      // Small delay to ensure state is updated
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      setNavigating(true);
+      // Use replace to prevent back button returning to login
+      router.replace(redirect);
     } catch {
       setError('An error occurred.');
-    } finally {
       setIsLoading(false);
       setSelectedUser(null);
     }
   };
 
-  // Show loading while checking auth state
-  if (authLoading) {
+  // Show loading while checking auth state or navigating
+  if (authLoading || navigating) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4" />
+          <p className="text-gray-600">
+            {navigating ? 'Redirecting to admin portal...' : 'Loading...'}
+          </p>
+        </div>
       </div>
     );
   }

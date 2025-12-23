@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { AdminLayout } from '@acts29/admin-ui';
 import { ErrorBoundary } from '../../components';
-import { useAuth, DEMO_USERS } from '@/lib/auth';
+import { useAuth } from '@/lib/auth';
 
 // Loading skeleton for admin layout
 function AdminLoadingSkeleton() {
@@ -53,6 +53,7 @@ export default function AdminDashboardLayout({
 
   const handleSignOut = () => {
     logout();
+    router.push('/login');
   };
 
   return (

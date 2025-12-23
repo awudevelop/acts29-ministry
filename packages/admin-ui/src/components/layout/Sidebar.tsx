@@ -18,7 +18,7 @@ import {
   BookOpen,
   MapPin,
   UsersRound,
-  HandHeart,
+  HeartHandshake,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -76,7 +76,7 @@ const navigation: NavItem[] = [
   {
     name: 'Prayer',
     href: '/admin/prayer',
-    icon: HandHeart,
+    icon: HeartHandshake,
     roles: ['super_admin', 'org_admin', 'staff'],
   },
   {

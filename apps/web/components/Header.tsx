@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X, Heart, LogIn } from 'lucide-react';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -63,8 +63,15 @@ export function Header() {
           ))}
         </div>
 
-        {/* CTA Button */}
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        {/* CTA Buttons */}
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-3">
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+          >
+            <LogIn className="h-4 w-4" />
+            Login
+          </Link>
           <Link
             href="/get-involved#give"
             className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
@@ -89,14 +96,24 @@ export function Header() {
                 {item.name}
               </Link>
             ))}
-            <Link
-              href="/get-involved#give"
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-base font-semibold text-white"
-            >
-              <Heart className="h-4 w-4" />
-              Donate
-            </Link>
+            <div className="mt-4 flex flex-col gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-base font-semibold text-gray-700"
+              >
+                <LogIn className="h-4 w-4" />
+                Login
+              </Link>
+              <Link
+                href="/get-involved#give"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-base font-semibold text-white"
+              >
+                <Heart className="h-4 w-4" />
+                Donate
+              </Link>
+            </div>
           </div>
         </div>
       )}

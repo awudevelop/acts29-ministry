@@ -10,7 +10,7 @@ import {
   formatDate,
 } from '@acts29/admin-ui';
 import { Plus, Calendar, Users, MapPin, Clock, Eye, Edit } from 'lucide-react';
-import { mockEvents } from '@acts29/database';
+import { mockEvents, mockEventRegistrations } from '@acts29/database';
 
 export default function CalendarPage() {
   const [filter, setFilter] = React.useState<'all' | 'upcoming' | 'completed'>('all');
@@ -21,7 +21,8 @@ export default function CalendarPage() {
   });
 
   const upcomingCount = mockEvents.filter((e) => e.status === 'upcoming').length;
-  const totalRegistrations = mockEvents.reduce((sum, e) => sum + e.registered, 0);
+  const totalRegistrations = mockEventRegistrations.length;
+  const totalGuests = mockEventRegistrations.reduce((sum, r) => sum + r.party_size, 0);
 
   return (
     <div className="space-y-6">
@@ -47,8 +48,8 @@ export default function CalendarPage() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard title="Total Events" value={mockEvents.length} icon={Calendar} />
         <StatCard title="Upcoming Events" value={upcomingCount} icon={Clock} />
-        <StatCard title="Total Registrations" value={totalRegistrations} icon={Users} />
-        <StatCard title="Avg. Attendance" value={Math.round(totalRegistrations / mockEvents.length)} icon={Users} />
+        <StatCard title="Registrations" value={totalRegistrations} icon={Users} />
+        <StatCard title="Total Guests" value={totalGuests} icon={Users} />
       </div>
 
       {/* Filter Tabs */}
@@ -70,59 +71,63 @@ export default function CalendarPage() {
 
       {/* Events Grid */}
       <div className="grid gap-6 md:grid-cols-2">
-        {filteredEvents.map((event) => (
-          <div
-            key={event.id}
-            className="rounded-xl border bg-white p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-gray-900">{event.title}</h3>
-                  {event.status === 'upcoming' ? (
-                    <Badge variant="info">Upcoming</Badge>
-                  ) : (
-                    <Badge variant="default">Completed</Badge>
-                  )}
-                  {!event.is_public && <Badge variant="warning">Private</Badge>}
-                </div>
-                <p className="mt-2 text-sm text-gray-600 line-clamp-2">
-                  {event.description}
-                </p>
-              </div>
-            </div>
+        {filteredEvents.map((event) => {
+          const eventRegistrations = mockEventRegistrations.filter((r) => r.event_id === event.id);
+          const eventGuests = eventRegistrations.reduce((sum, r) => sum + r.party_size, 0);
 
-            <div className="mt-4 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(event.start_time)}</span>
+          return (
+            <div
+              key={event.id}
+              className="rounded-xl border bg-white p-6 hover:shadow-md transition-shadow"
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-gray-900">{event.title}</h3>
+                    {event.status === 'upcoming' ? (
+                      <Badge variant="info">Upcoming</Badge>
+                    ) : (
+                      <Badge variant="default">Completed</Badge>
+                    )}
+                    {!event.is_public && <Badge variant="warning">Private</Badge>}
+                  </div>
+                  <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                    {event.description}
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Clock className="h-4 w-4" />
-                <span>
-                  {new Date(event.start_time).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })}{' '}
-                  -{' '}
-                  {new Date(event.end_time).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })}
-                </span>
+
+              <div className="mt-4 space-y-2">
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Calendar className="h-4 w-4" />
+                  <span>{formatDate(event.start_time)}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Clock className="h-4 w-4" />
+                  <span>
+                    {new Date(event.start_time).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}{' '}
+                    -{' '}
+                    {new Date(event.end_time).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <MapPin className="h-4 w-4" />
+                  <span>{event.location}</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <Users className="h-4 w-4" />
+                  <span>
+                    {eventRegistrations.length} registrations ({eventGuests} guests)
+                    {event.max_attendees && ` / ${event.max_attendees} max`}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <MapPin className="h-4 w-4" />
-                <span>{event.location}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Users className="h-4 w-4" />
-                <span>
-                  {event.registered} registered
-                  {event.max_attendees && ` / ${event.max_attendees} max`}
-                </span>
-              </div>
-            </div>
 
             <div className="mt-4 flex items-center gap-2 border-t pt-4">
               <Link href={`/admin/calendar/${event.id}`}>
@@ -145,7 +150,8 @@ export default function CalendarPage() {
               </Link>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {filteredEvents.length === 0 && (

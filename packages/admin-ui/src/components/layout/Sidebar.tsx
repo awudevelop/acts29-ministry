@@ -15,6 +15,9 @@ import {
   ChevronLeft,
   ChevronDown,
   LogOut,
+  BookOpen,
+  MapPin,
+  UsersRound,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
@@ -61,6 +64,24 @@ const navigation: NavItem[] = [
     name: 'Calendar',
     href: '/admin/calendar',
     icon: Calendar,
+    roles: ['super_admin', 'org_admin', 'staff'],
+  },
+  {
+    name: 'Teaching',
+    href: '/admin/teaching',
+    icon: BookOpen,
+    roles: ['super_admin', 'org_admin', 'staff'],
+  },
+  {
+    name: 'Resources',
+    href: '/admin/resources',
+    icon: MapPin,
+    roles: ['super_admin', 'org_admin', 'staff'],
+  },
+  {
+    name: 'Teams',
+    href: '/admin/teams',
+    icon: UsersRound,
     roles: ['super_admin', 'org_admin', 'staff'],
   },
   {

@@ -15,6 +15,9 @@ import type {
   Content,
   PrayerRequest,
   Event,
+  EventRegistration,
+  Team,
+  TeamMember,
 } from '../types';
 
 // ===========================================
@@ -214,11 +217,12 @@ export const mockProfiles: Profile[] = [
 // RESOURCES
 // ===========================================
 
-export const mockResources: Resource[] = [
+export const mockResources: (Resource & { team_id?: string | null })[] = [
   // HELPING HANDS RESOURCES
   {
     id: '770e8400-e29b-41d4-a716-446655440001',
     organization_id: '550e8400-e29b-41d4-a716-446655440001',
+    team_id: 'team-002', // Shelter Operations team
     name: 'Helping Hands Emergency Shelter',
     type: 'shelter',
     description: 'Emergency shelter providing daily shelter and day services to 40-60 men over 18. Includes case management, water, mail, advocacy, legal support, resource referral, and evening meal.',
@@ -608,12 +612,13 @@ export const mockCases: Case[] = [
 // VOLUNTEER SHIFTS
 // ===========================================
 
-export const mockVolunteerShifts: VolunteerShift[] = [
+export const mockVolunteerShifts: (VolunteerShift & { team_id?: string | null })[] = [
   {
     id: '990e8400-e29b-41d4-a716-446655440001',
     organization_id: '550e8400-e29b-41d4-a716-446655440001',
     volunteer_id: '660e8400-e29b-41d4-a716-446655440004',
     resource_id: '770e8400-e29b-41d4-a716-446655440001',
+    team_id: 'team-002', // Shelter Operations
     start_time: '2024-12-20T17:00:00Z',
     end_time: '2024-12-20T20:00:00Z',
     role: 'Evening Meal Service - Helping Hands',
@@ -626,6 +631,7 @@ export const mockVolunteerShifts: VolunteerShift[] = [
     organization_id: '550e8400-e29b-41d4-a716-446655440002',
     volunteer_id: '660e8400-e29b-41d4-a716-446655440004',
     resource_id: '770e8400-e29b-41d4-a716-446655440003',
+    team_id: 'team-003', // Family Ministry
     start_time: '2024-12-21T09:00:00Z',
     end_time: '2024-12-21T12:00:00Z',
     role: 'Children\'s Ministry - Inner City Mission',
@@ -638,6 +644,7 @@ export const mockVolunteerShifts: VolunteerShift[] = [
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
     volunteer_id: null,
     resource_id: '770e8400-e29b-41d4-a716-446655440005',
+    team_id: 'team-004', // Day Services
     start_time: '2024-12-22T08:00:00Z',
     end_time: '2024-12-22T12:00:00Z',
     role: 'Day Services - Washington Street Mission',
@@ -650,6 +657,7 @@ export const mockVolunteerShifts: VolunteerShift[] = [
     organization_id: '550e8400-e29b-41d4-a716-446655440005',
     volunteer_id: null,
     resource_id: '770e8400-e29b-41d4-a716-446655440008',
+    team_id: null,
     start_time: '2024-12-24T10:00:00Z',
     end_time: '2024-12-24T14:00:00Z',
     role: 'Christmas Eve Meal - St. John\'s Breadline',
@@ -662,6 +670,7 @@ export const mockVolunteerShifts: VolunteerShift[] = [
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
     volunteer_id: null,
     resource_id: '770e8400-e29b-41d4-a716-446655440007',
+    team_id: 'team-001', // Outreach Team
     start_time: '2024-12-23T09:00:00Z',
     end_time: '2024-12-23T13:00:00Z',
     role: 'Winter Clothing Drive - Washington Street Mission',
@@ -674,6 +683,7 @@ export const mockVolunteerShifts: VolunteerShift[] = [
     organization_id: '550e8400-e29b-41d4-a716-446655440006',
     volunteer_id: null,
     resource_id: '770e8400-e29b-41d4-a716-446655440012',
+    team_id: null,
     start_time: '2024-12-28T08:00:00Z',
     end_time: '2024-12-28T12:00:00Z',
     role: 'Food Sorting - Central Illinois Foodbank',
@@ -1088,5 +1098,340 @@ export const mockEvents: Event[] = [
     status: 'upcoming',
     created_at: '2024-12-01T00:00:00Z',
     updated_at: '2024-12-01T00:00:00Z',
+  },
+];
+
+// ===========================================
+// EVENT REGISTRATIONS
+// ===========================================
+
+export const mockEventRegistrations: EventRegistration[] = [
+  // Christmas Eve Community Dinner registrations
+  {
+    id: 'reg-001',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'John',
+    last_name: 'Smith',
+    email: 'john.smith@email.com',
+    phone: '(217) 555-1234',
+    status: 'confirmed',
+    party_size: 4,
+    notes: 'Family of 4 including 2 children',
+    created_at: '2024-12-01T10:00:00Z',
+    updated_at: '2024-12-01T10:00:00Z',
+  },
+  {
+    id: 'reg-002',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Sarah',
+    last_name: 'Johnson',
+    email: 'sarah.j@email.com',
+    phone: '(217) 555-2345',
+    status: 'confirmed',
+    party_size: 2,
+    notes: null,
+    created_at: '2024-12-02T14:30:00Z',
+    updated_at: '2024-12-02T14:30:00Z',
+  },
+  {
+    id: 'reg-003',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Michael',
+    last_name: 'Williams',
+    email: 'mwilliams@email.com',
+    phone: '(217) 555-3456',
+    status: 'waitlist',
+    party_size: 6,
+    notes: 'Large family group - need accessibility accommodations',
+    created_at: '2024-12-03T09:15:00Z',
+    updated_at: '2024-12-03T09:15:00Z',
+  },
+  {
+    id: 'reg-004',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Emily',
+    last_name: 'Davis',
+    email: 'emily.davis@email.com',
+    phone: '(217) 555-4567',
+    status: 'confirmed',
+    party_size: 3,
+    notes: null,
+    created_at: '2024-12-04T16:45:00Z',
+    updated_at: '2024-12-04T16:45:00Z',
+  },
+  {
+    id: 'reg-005',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Robert',
+    last_name: 'Brown',
+    email: 'robert.b@email.com',
+    phone: '(217) 555-5678',
+    status: 'cancelled',
+    party_size: 2,
+    notes: 'Had to cancel due to family emergency',
+    created_at: '2024-12-05T11:20:00Z',
+    updated_at: '2024-12-10T08:00:00Z',
+  },
+  {
+    id: 'reg-006',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Lisa',
+    last_name: 'Anderson',
+    email: 'lisa.a@email.com',
+    phone: '(217) 555-6789',
+    status: 'confirmed',
+    party_size: 1,
+    notes: 'Interested in volunteering as well',
+    created_at: '2024-12-06T13:00:00Z',
+    updated_at: '2024-12-06T13:00:00Z',
+  },
+  {
+    id: 'reg-007',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'David',
+    last_name: 'Martinez',
+    email: 'david.m@email.com',
+    phone: '(217) 555-7890',
+    status: 'confirmed',
+    party_size: 5,
+    notes: 'Bringing elderly parents who need seating near entrance',
+    created_at: '2024-12-07T09:30:00Z',
+    updated_at: '2024-12-07T09:30:00Z',
+  },
+  {
+    id: 'reg-008',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440001',
+    first_name: 'Jennifer',
+    last_name: 'Taylor',
+    email: 'jtaylor@email.com',
+    phone: null,
+    status: 'registered',
+    party_size: 2,
+    notes: null,
+    created_at: '2024-12-08T15:45:00Z',
+    updated_at: '2024-12-08T15:45:00Z',
+  },
+  // Monthly Food Distribution registrations
+  {
+    id: 'reg-009',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440003',
+    first_name: 'Maria',
+    last_name: 'Garcia',
+    email: 'maria.g@email.com',
+    phone: '(217) 555-8901',
+    status: 'confirmed',
+    party_size: 1,
+    notes: 'Single parent household',
+    created_at: '2024-12-10T10:00:00Z',
+    updated_at: '2024-12-10T10:00:00Z',
+  },
+  {
+    id: 'reg-010',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440003',
+    first_name: 'James',
+    last_name: 'Wilson',
+    email: 'jwilson@email.com',
+    phone: '(217) 555-9012',
+    status: 'confirmed',
+    party_size: 1,
+    notes: null,
+    created_at: '2024-12-11T11:30:00Z',
+    updated_at: '2024-12-11T11:30:00Z',
+  },
+  // Community Prayer Breakfast registrations
+  {
+    id: 'reg-011',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440005',
+    first_name: 'Patricia',
+    last_name: 'Lee',
+    email: 'p.lee@email.com',
+    phone: '(217) 555-0123',
+    status: 'confirmed',
+    party_size: 2,
+    notes: 'Would like to bring a guest',
+    created_at: '2024-12-15T08:00:00Z',
+    updated_at: '2024-12-15T08:00:00Z',
+  },
+  {
+    id: 'reg-012',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440005',
+    first_name: 'Thomas',
+    last_name: 'Clark',
+    email: 'tclark@email.com',
+    phone: '(217) 555-1234',
+    status: 'confirmed',
+    party_size: 1,
+    notes: null,
+    created_at: '2024-12-16T09:15:00Z',
+    updated_at: '2024-12-16T09:15:00Z',
+  },
+  // Homeless Awareness Walk registrations
+  {
+    id: 'reg-013',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440006',
+    first_name: 'Amanda',
+    last_name: 'White',
+    email: 'a.white@email.com',
+    phone: '(217) 555-2345',
+    status: 'confirmed',
+    party_size: 3,
+    notes: 'Bringing church group from Grace Lutheran',
+    created_at: '2024-12-12T14:00:00Z',
+    updated_at: '2024-12-12T14:00:00Z',
+  },
+  {
+    id: 'reg-014',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440006',
+    first_name: 'Christopher',
+    last_name: 'Harris',
+    email: 'charris@email.com',
+    phone: '(217) 555-3456',
+    status: 'registered',
+    party_size: 2,
+    notes: null,
+    created_at: '2024-12-14T10:30:00Z',
+    updated_at: '2024-12-14T10:30:00Z',
+  },
+  {
+    id: 'reg-015',
+    event_id: 'ev0e8400-e29b-41d4-a716-446655440006',
+    first_name: 'Michelle',
+    last_name: 'Robinson',
+    email: 'mrobinson@email.com',
+    phone: null,
+    status: 'waitlist',
+    party_size: 10,
+    notes: 'Youth group from First Baptist - 10 teens plus 2 adult chaperones',
+    created_at: '2024-12-18T16:00:00Z',
+    updated_at: '2024-12-18T16:00:00Z',
+  },
+];
+
+// ===========================================
+// TEAMS
+// ===========================================
+
+export const mockTeams: Team[] = [
+  {
+    id: 'team-001',
+    organization_id: '550e8400-e29b-41d4-a716-446655440001', // Helping Hands
+    name: 'Outreach Team',
+    slug: 'outreach-team',
+    description: 'Street outreach and community engagement. Connects with individuals experiencing homelessness and provides initial assessments, resource referrals, and relationship building.',
+    color: '#3B82F6', // blue
+    icon: 'Heart',
+    is_active: true,
+    created_at: '2024-01-15T00:00:00Z',
+    updated_at: '2024-01-15T00:00:00Z',
+  },
+  {
+    id: 'team-002',
+    organization_id: '550e8400-e29b-41d4-a716-446655440001', // Helping Hands
+    name: 'Shelter Operations',
+    slug: 'shelter-operations',
+    description: 'Daily shelter management, meal service coordination, and resident support. Ensures smooth operations of the emergency shelter facility.',
+    color: '#10B981', // green
+    icon: 'Home',
+    is_active: true,
+    created_at: '2024-02-01T00:00:00Z',
+    updated_at: '2024-02-01T00:00:00Z',
+  },
+  {
+    id: 'team-003',
+    organization_id: '550e8400-e29b-41d4-a716-446655440002', // Inner City Mission
+    name: 'Family Ministry',
+    slug: 'family-ministry',
+    description: 'Supporting families with children through counseling, education, childcare, and housing assistance. Focused on mental and spiritual transformation.',
+    color: '#F59E0B', // amber
+    icon: 'Users',
+    is_active: true,
+    created_at: '2024-02-15T00:00:00Z',
+    updated_at: '2024-02-15T00:00:00Z',
+  },
+  {
+    id: 'team-004',
+    organization_id: '550e8400-e29b-41d4-a716-446655440003', // Washington Street Mission
+    name: 'Day Services',
+    slug: 'day-services',
+    description: 'Meals, showers, laundry, clothing distribution, and daily support services. Over 100 years of serving Springfield with love and compassion.',
+    color: '#8B5CF6', // purple
+    icon: 'Coffee',
+    is_active: true,
+    created_at: '2024-03-01T00:00:00Z',
+    updated_at: '2024-03-01T00:00:00Z',
+  },
+];
+
+// ===========================================
+// TEAM MEMBERS
+// ===========================================
+
+export const mockTeamMembers: TeamMember[] = [
+  // Outreach Team - Helping Hands
+  {
+    id: 'tm-001',
+    team_id: 'team-001',
+    profile_id: '660e8400-e29b-41d4-a716-446655440001', // Robert Gillespie (org_admin)
+    role: 'lead',
+    joined_at: '2024-01-15T00:00:00Z',
+    created_at: '2024-01-15T00:00:00Z',
+    updated_at: '2024-01-15T00:00:00Z',
+  },
+  {
+    id: 'tm-002',
+    team_id: 'team-001',
+    profile_id: '660e8400-e29b-41d4-a716-446655440004', // Jennifer Martinez (volunteer)
+    role: 'member',
+    joined_at: '2024-02-20T00:00:00Z',
+    created_at: '2024-02-20T00:00:00Z',
+    updated_at: '2024-02-20T00:00:00Z',
+  },
+  // Shelter Operations - Helping Hands
+  {
+    id: 'tm-003',
+    team_id: 'team-002',
+    profile_id: '660e8400-e29b-41d4-a716-446655440001', // Robert Gillespie
+    role: 'lead',
+    joined_at: '2024-02-01T00:00:00Z',
+    created_at: '2024-02-01T00:00:00Z',
+    updated_at: '2024-02-01T00:00:00Z',
+  },
+  {
+    id: 'tm-004',
+    team_id: 'team-002',
+    profile_id: '660e8400-e29b-41d4-a716-446655440004', // Jennifer Martinez
+    role: 'member',
+    joined_at: '2024-02-10T00:00:00Z',
+    created_at: '2024-02-10T00:00:00Z',
+    updated_at: '2024-02-10T00:00:00Z',
+  },
+  // Family Ministry - Inner City Mission
+  {
+    id: 'tm-005',
+    team_id: 'team-003',
+    profile_id: '660e8400-e29b-41d4-a716-446655440002', // David Thompson (org_admin)
+    role: 'lead',
+    joined_at: '2024-02-15T00:00:00Z',
+    created_at: '2024-02-15T00:00:00Z',
+    updated_at: '2024-02-15T00:00:00Z',
+  },
+  {
+    id: 'tm-006',
+    team_id: 'team-003',
+    profile_id: '660e8400-e29b-41d4-a716-446655440005', // Angela Wilson (staff)
+    role: 'member',
+    joined_at: '2024-03-05T00:00:00Z',
+    created_at: '2024-03-05T00:00:00Z',
+    updated_at: '2024-03-05T00:00:00Z',
+  },
+  // Day Services - Washington Street Mission
+  {
+    id: 'tm-007',
+    team_id: 'team-004',
+    profile_id: '660e8400-e29b-41d4-a716-446655440003', // Michael Harris (org_admin)
+    role: 'lead',
+    joined_at: '2024-03-01T00:00:00Z',
+    created_at: '2024-03-01T00:00:00Z',
+    updated_at: '2024-03-01T00:00:00Z',
   },
 ];

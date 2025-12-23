@@ -14,17 +14,20 @@ import {
   formatDateTime,
 } from '@acts29/admin-ui';
 import { Edit, Trash2, FileText, Mail, ArrowLeft, User, Calendar, DollarSign } from 'lucide-react';
-import { mockDonations, mockProfiles } from '@acts29/database';
+import { mockDonations, mockProfiles, mockOrganizations } from '@acts29/database';
 
 export default function DonationDetailPage() {
   const params = useParams();
   const router = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [isSendingReceipt, setIsSendingReceipt] = React.useState(false);
+  const [receiptMessage, setReceiptMessage] = React.useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const donation = mockDonations.find((d) => d.id === params.id);
   const donor = donation?.donor_id
     ? mockProfiles.find((p) => p.id === donation.donor_id)
     : null;
+  const organization = mockOrganizations[0]!;
 
   if (!donation) {
     return (
@@ -60,9 +63,61 @@ export default function DonationDetailPage() {
     router.push(`/admin/tax-receipts/generate?donation=${donation.id}`);
   };
 
-  const handleSendReceipt = () => {
-    // In a real app, this would send the receipt via email
-    alert('Receipt sent to donor!');
+  const handleSendReceipt = async () => {
+    if (!donor) return;
+
+    setIsSendingReceipt(true);
+    setReceiptMessage(null);
+
+    try {
+      // Generate mock email from donor name
+      const donorEmail = `${donor.first_name.toLowerCase()}.${donor.last_name.toLowerCase()}@example.com`;
+
+      const response = await fetch('/api/receipts/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          donorEmail,
+          donorName: `${donor.first_name} ${donor.last_name}`,
+          organization: {
+            name: organization.name,
+            address: organization.address,
+            phone: organization.phone,
+            email: organization.email || 'info@acts29ministry.org',
+            ein: '47-1234567',
+          },
+          donation: {
+            id: donation.id,
+            date: donation.created_at,
+            type: donation.type,
+            amount: donation.amount,
+            description: donation.description,
+            fee_amount: donation.fee_amount,
+            total_amount: donation.total_amount,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+
+      setReceiptMessage({
+        type: 'success',
+        text: `Receipt sent to ${donorEmail}! Receipt #${data.receiptNumber}`,
+      });
+    } catch (err) {
+      setReceiptMessage({
+        type: 'error',
+        text: err instanceof Error ? err.message : 'Failed to send receipt. Please try again.',
+      });
+    } finally {
+      setIsSendingReceipt(false);
+    }
   };
 
   return (
@@ -97,9 +152,9 @@ export default function DonationDetailPage() {
             Generate Receipt
           </Button>
           {donor && (
-            <Button variant="outline" onClick={handleSendReceipt}>
+            <Button variant="outline" onClick={handleSendReceipt} loading={isSendingReceipt}>
               <Mail className="mr-2 h-4 w-4" />
-              Send Receipt
+              Email Receipt
             </Button>
           )}
           <Link href={`/admin/donations/${donation.id}/edit`}>
@@ -114,6 +169,27 @@ export default function DonationDetailPage() {
           </Button>
         </div>
       </div>
+
+      {/* Receipt Message */}
+      {receiptMessage && (
+        <div
+          className={`rounded-lg p-4 ${
+            receiptMessage.type === 'success'
+              ? 'bg-green-50 text-green-800 border border-green-200'
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span>{receiptMessage.text}</span>
+            <button
+              onClick={() => setReceiptMessage(null)}
+              className="text-current opacity-70 hover:opacity-100"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Details */}

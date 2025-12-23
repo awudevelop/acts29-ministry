@@ -127,11 +127,46 @@ Thank you for your generous support!
     setError(null);
 
     try {
-      // Simulate email sending
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSuccess(`Receipt sent to ${donor.first_name} ${donor.last_name}!`);
-    } catch {
-      setError('Failed to send receipt. Please try again.');
+      // For demo purposes, we'll use a mock email address
+      // In production, this would come from the user's profile
+      const donorEmail = `${donor.first_name.toLowerCase()}.${donor.last_name.toLowerCase()}@example.com`;
+
+      const response = await fetch('/api/receipts/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          donorEmail,
+          donorName: `${donor.first_name} ${donor.last_name}`,
+          organization: {
+            name: organization.name,
+            address: organization.address,
+            phone: organization.phone,
+            email: organization.email || 'info@acts29ministry.org',
+            ein: '47-1234567',
+          },
+          donation: {
+            id: selectedDonation.id,
+            date: selectedDonation.created_at,
+            type: selectedDonation.type,
+            amount: selectedDonation.amount,
+            description: selectedDonation.description,
+            fee_amount: selectedDonation.fee_amount,
+            total_amount: selectedDonation.total_amount,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+
+      setSuccess(`Receipt sent to ${donor.first_name} ${donor.last_name} (${donorEmail})! Receipt #${data.receiptNumber}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send receipt. Please try again.');
     } finally {
       setIsSending(false);
     }

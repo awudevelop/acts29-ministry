@@ -10,4 +10,7 @@ export {
   mockPrayerRequests,
   mockStats,
   mockEvents,
+  mockEventRegistrations,
+  mockTeams,
+  mockTeamMembers,
 } from './data';

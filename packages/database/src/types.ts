@@ -26,6 +26,10 @@ export type ContentType = 'sermon' | 'devotional' | 'testimony' | 'article' | 'v
 
 export type EventStatus = 'upcoming' | 'completed' | 'cancelled';
 
+export type RegistrationStatus = 'registered' | 'confirmed' | 'waitlist' | 'cancelled' | 'attended';
+
+export type TeamRole = 'lead' | 'member';
+
 export interface Database {
   public: {
     Tables: {
@@ -74,6 +78,7 @@ export interface Database {
         Row: {
           id: string;
           organization_id: string;
+          team_id: string | null;
           name: string;
           type: ResourceType;
           description: string | null;
@@ -122,6 +127,7 @@ export interface Database {
           organization_id: string;
           volunteer_id: string | null;
           resource_id: string | null;
+          team_id: string | null;
           start_time: string;
           end_time: string;
           role: string;
@@ -156,6 +162,7 @@ export interface Database {
         Row: {
           id: string;
           organization_id: string;
+          team_id: string | null;
           author_id: string;
           title: string;
           type: ContentType;
@@ -214,6 +221,61 @@ export interface Database {
         >;
         Update: Partial<Database['public']['Tables']['events']['Insert']>;
       };
+      event_registrations: {
+        Row: {
+          id: string;
+          event_id: string;
+          first_name: string;
+          last_name: string;
+          email: string;
+          phone: string | null;
+          status: RegistrationStatus;
+          party_size: number;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<
+          Database['public']['Tables']['event_registrations']['Row'],
+          'id' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<Database['public']['Tables']['event_registrations']['Insert']>;
+      };
+      teams: {
+        Row: {
+          id: string;
+          organization_id: string;
+          name: string;
+          slug: string;
+          description: string | null;
+          color: string | null;
+          icon: string | null;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<
+          Database['public']['Tables']['teams']['Row'],
+          'id' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<Database['public']['Tables']['teams']['Insert']>;
+      };
+      team_members: {
+        Row: {
+          id: string;
+          team_id: string;
+          profile_id: string;
+          role: TeamRole;
+          joined_at: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<
+          Database['public']['Tables']['team_members']['Row'],
+          'id' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<Database['public']['Tables']['team_members']['Insert']>;
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -224,6 +286,8 @@ export interface Database {
       donation_type: DonationType;
       content_type: ContentType;
       event_status: EventStatus;
+      registration_status: RegistrationStatus;
+      team_role: TeamRole;
     };
   };
 }
@@ -238,3 +302,6 @@ export type Donation = Database['public']['Tables']['donations']['Row'];
 export type Content = Database['public']['Tables']['content']['Row'];
 export type PrayerRequest = Database['public']['Tables']['prayer_requests']['Row'];
 export type Event = Database['public']['Tables']['events']['Row'];
+export type EventRegistration = Database['public']['Tables']['event_registrations']['Row'];
+export type Team = Database['public']['Tables']['teams']['Row'];
+export type TeamMember = Database['public']['Tables']['team_members']['Row'];

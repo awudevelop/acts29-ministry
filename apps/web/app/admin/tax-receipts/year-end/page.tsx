@@ -8,18 +8,19 @@ import {
   Alert,
   formatCurrency,
 } from '@acts29/admin-ui';
-import { FileText, Download, Mail, Check, ArrowLeft, Users, Calendar, Loader2 } from 'lucide-react';
-import { mockDonations, mockProfiles } from '@acts29/database';
+import { FileText, Download, Mail, Check, ArrowLeft, Users, Calendar, Loader2, Send } from 'lucide-react';
+import { mockDonations, mockProfiles, mockOrganizations } from '@acts29/database';
 
 interface DonorSummary {
   id: string;
   name: string;
-  email?: string | null;
+  email: string;
   donationCount: number;
   totalAmount: number;
   donations: typeof mockDonations;
   selected: boolean;
   generated: boolean;
+  emailed: boolean;
 }
 
 export default function YearEndStatementsPage() {
@@ -35,9 +36,11 @@ export default function YearEndStatementsPage() {
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [isSending, setIsSending] = React.useState(false);
   const [progress, setProgress] = React.useState(0);
+  const [emailProgress, setEmailProgress] = React.useState(0);
   const [success, setSuccess] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
+  const organization = mockOrganizations[0]!;
   const years = [currentYear, currentYear - 1, currentYear - 2];
 
   // Calculate donor summaries
@@ -69,15 +72,18 @@ export default function YearEndStatementsPage() {
         existing.totalAmount += amount;
         existing.donations.push(donation);
       } else {
+        // Generate mock email from donor name
+        const mockEmail = `${donor.first_name.toLowerCase()}.${donor.last_name.toLowerCase()}@example.com`;
         donorMap.set(donation.donor_id, {
           id: donation.donor_id,
           name: `${donor.first_name} ${donor.last_name}`,
-          email: null, // Would come from user profile
+          email: mockEmail,
           donationCount: 1,
           totalAmount: amount,
           donations: [donation],
           selected: true,
           generated: false,
+          emailed: false,
         });
       }
     });
@@ -136,13 +142,107 @@ export default function YearEndStatementsPage() {
     }
 
     setIsSending(true);
+    setEmailProgress(0);
     setError(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setSuccess(`Successfully emailed ${selected.length} year-end statements!`);
+      let successCount = 0;
+      let failCount = 0;
+
+      for (let i = 0; i < selected.length; i++) {
+        const donor = selected[i]!;
+
+        try {
+          const response = await fetch('/api/receipts/annual', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              donorEmail: donor.email,
+              donorName: donor.name,
+              organization: {
+                name: organization.name,
+                address: organization.address,
+                phone: organization.phone,
+                email: organization.email || 'info@acts29ministry.org',
+                ein: '47-1234567',
+              },
+              donations: donor.donations,
+              taxYear: selectedYear,
+            }),
+          });
+
+          if (response.ok) {
+            successCount++;
+            setDonorSummaries((prev) =>
+              prev.map((d) => (d.id === donor.id ? { ...d, emailed: true } : d))
+            );
+          } else {
+            failCount++;
+          }
+        } catch {
+          failCount++;
+        }
+
+        setEmailProgress(((i + 1) / selected.length) * 100);
+      }
+
+      if (failCount === 0) {
+        setSuccess(`Successfully emailed ${successCount} year-end statements!`);
+      } else {
+        setSuccess(`Sent ${successCount} emails. ${failCount} failed.`);
+      }
     } catch {
       setError('Failed to send emails. Please try again.');
+    } finally {
+      setIsSending(false);
+      setEmailProgress(0);
+    }
+  };
+
+  const handleEmailSingle = async (donor: DonorSummary) => {
+    if (!donor.generated) {
+      setError('Please generate the statement first before sending email.');
+      return;
+    }
+
+    setIsSending(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/receipts/annual', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          donorEmail: donor.email,
+          donorName: donor.name,
+          organization: {
+            name: organization.name,
+            address: organization.address,
+            phone: organization.phone,
+            email: organization.email || 'info@acts29ministry.org',
+            ein: '47-1234567',
+          },
+          donations: donor.donations,
+          taxYear: selectedYear,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send email');
+      }
+
+      setDonorSummaries((prev) =>
+        prev.map((d) => (d.id === donor.id ? { ...d, emailed: true } : d))
+      );
+      setSuccess(`Statement sent to ${donor.name} (${donor.email})!`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send email. Please try again.');
     } finally {
       setIsSending(false);
     }
@@ -235,19 +335,19 @@ export default function YearEndStatementsPage() {
       </div>
 
       {/* Progress Bar */}
-      {isGenerating && (
+      {(isGenerating || isSending) && (
         <div className="rounded-xl border bg-white p-6">
           <div className="flex items-center gap-4">
             <Loader2 className="h-5 w-5 animate-spin text-primary-600" />
             <div className="flex-1">
               <div className="flex justify-between text-sm mb-1">
-                <span>Generating statements...</span>
-                <span>{Math.round(progress)}%</span>
+                <span>{isGenerating ? 'Generating statements...' : 'Sending emails...'}</span>
+                <span>{Math.round(isGenerating ? progress : emailProgress)}%</span>
               </div>
               <div className="h-2 rounded-full bg-gray-200">
                 <div
                   className="h-2 rounded-full bg-primary-600 transition-all duration-300"
-                  style={{ width: `${progress}%` }}
+                  style={{ width: `${isGenerating ? progress : emailProgress}%` }}
                 />
               </div>
             </div>
@@ -320,21 +420,41 @@ export default function YearEndStatementsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  {donor.generated && (
+                  {donor.emailed && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
+                      <Send className="h-3 w-3" />
+                      Emailed
+                    </span>
+                  )}
+                  {donor.generated && !donor.emailed && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
                       <Check className="h-3 w-3" />
                       Generated
                     </span>
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      // View/download individual statement
-                    }}
-                  >
-                    <FileText className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        // View/download individual statement
+                      }}
+                      title="View Statement"
+                    >
+                      <FileText className="h-4 w-4" />
+                    </Button>
+                    {donor.generated && !donor.emailed && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEmailSingle(donor)}
+                        disabled={isSending}
+                        title={`Email to ${donor.email}`}
+                      >
+                        <Mail className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

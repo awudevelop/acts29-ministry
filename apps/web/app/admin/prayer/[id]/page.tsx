@@ -12,7 +12,7 @@ import {
 import {
   Edit,
   Trash2,
-  HandHeart,
+  HeartHandshake,
   CheckCircle,
   Clock,
   Heart,
@@ -46,7 +46,7 @@ export default function PrayerDetailPage() {
           ]}
         />
         <div className="rounded-xl border bg-white p-12 text-center">
-          <HandHeart className="mx-auto h-12 w-12 text-gray-400" />
+          <HeartHandshake className="mx-auto h-12 w-12 text-gray-400" />
           <h2 className="mt-4 text-lg font-semibold text-gray-900">Prayer Request Not Found</h2>
           <p className="mt-2 text-gray-600">
             The prayer request you&apos;re looking for doesn&apos;t exist or has been deleted.
@@ -103,7 +103,7 @@ export default function PrayerDetailPage() {
             {request.is_answered ? (
               <CheckCircle className="h-7 w-7" />
             ) : (
-              <HandHeart className="h-7 w-7" />
+              <HeartHandshake className="h-7 w-7" />
             )}
           </div>
           <div>
@@ -181,7 +181,7 @@ export default function PrayerDetailPage() {
             <div className="space-y-4">
               <div className="flex gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100">
-                  <HandHeart className="h-4 w-4 text-primary-600" />
+                  <HeartHandshake className="h-4 w-4 text-primary-600" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-900">Prayer request created</p>

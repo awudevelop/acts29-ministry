@@ -16,7 +16,7 @@ import {
   Eye,
   Edit,
   Trash2,
-  HandHeart,
+  HeartHandshake,
   CheckCircle,
   Clock,
   Users,
@@ -141,7 +141,7 @@ export default function PrayerAdminPage() {
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Requests" value={stats.total} icon={HandHeart} />
+        <StatCard title="Total Requests" value={stats.total} icon={HeartHandshake} />
         <StatCard title="Pending" value={stats.pending} icon={Clock} />
         <StatCard title="Answered" value={stats.answered} icon={CheckCircle} />
         <StatCard title="Total Prayers" value={stats.totalPrayers.toLocaleString()} icon={Heart} />
@@ -255,7 +255,7 @@ export default function PrayerAdminPage() {
                           {request.is_answered ? (
                             <CheckCircle className="h-5 w-5" />
                           ) : (
-                            <HandHeart className="h-5 w-5" />
+                            <HeartHandshake className="h-5 w-5" />
                           )}
                         </div>
                         <div className="min-w-0">
@@ -369,7 +369,7 @@ export default function PrayerAdminPage() {
 
           {filteredRequests.length === 0 && (
             <div className="py-12 text-center">
-              <HandHeart className="mx-auto h-12 w-12 text-gray-400" />
+              <HeartHandshake className="mx-auto h-12 w-12 text-gray-400" />
               <h3 className="mt-4 text-lg font-medium text-gray-900">No prayer requests found</h3>
               <p className="mt-2 text-gray-500">
                 {searchQuery || statusFilter !== 'all' || anonymousFilter !== 'all'

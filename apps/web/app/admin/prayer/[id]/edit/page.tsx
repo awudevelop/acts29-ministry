@@ -11,7 +11,7 @@ import {
 import {
   Save,
   ArrowLeft,
-  HandHeart,
+  HeartHandshake,
 } from 'lucide-react';
 import { mockPrayerRequests, mockOrganizations } from '@acts29/database';
 
@@ -43,7 +43,7 @@ export default function EditPrayerPage() {
           ]}
         />
         <div className="rounded-xl border bg-white p-12 text-center">
-          <HandHeart className="mx-auto h-12 w-12 text-gray-400" />
+          <HeartHandshake className="mx-auto h-12 w-12 text-gray-400" />
           <h2 className="mt-4 text-lg font-semibold text-gray-900">Prayer Request Not Found</h2>
           <p className="mt-2 text-gray-600">
             The prayer request you&apos;re looking for doesn&apos;t exist or has been deleted.

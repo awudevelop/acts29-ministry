@@ -11,7 +11,7 @@ import {
 import {
   Save,
   ArrowLeft,
-  HandHeart,
+  HeartHandshake,
 } from 'lucide-react';
 import { mockOrganizations } from '@acts29/database';
 
@@ -184,7 +184,7 @@ export default function NewPrayerPage() {
 
             <div className="rounded-xl border bg-primary-50 p-6">
               <div className="flex items-center gap-3 mb-3">
-                <HandHeart className="h-6 w-6 text-primary-600" />
+                <HeartHandshake className="h-6 w-6 text-primary-600" />
                 <h3 className="text-sm font-semibold text-primary-900">Prayer Request Tips</h3>
               </div>
               <ul className="text-xs text-primary-800 space-y-2">

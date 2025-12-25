@@ -278,3 +278,272 @@ export function generateOutlookEventUrl(event: Event): string {
 
   return `https://outlook.live.com/calendar/0/action/compose?${params.toString()}`;
 }
+
+// ===========================================
+// Volunteer Shift Calendar Support
+// ===========================================
+
+export interface VolunteerShiftCalendarItem {
+  id: string;
+  start_time: string;
+  end_time: string;
+  role: string;
+  status: string;
+  notes?: string | null;
+  location?: string;
+  organizationName?: string;
+  teamName?: string;
+}
+
+export interface ICalShiftOptions {
+  shift: VolunteerShiftCalendarItem;
+  organizerName?: string;
+  organizerEmail?: string;
+  url?: string;
+}
+
+/**
+ * Generate a VEVENT component for a volunteer shift
+ */
+export function generateShiftVEvent(options: ICalShiftOptions): string {
+  const { shift, organizerName, organizerEmail, url } = options;
+
+  const lines: string[] = [
+    'BEGIN:VEVENT',
+    `UID:shift-${generateUID(shift.id)}`,
+    `DTSTAMP:${formatICalDate(new Date())}`,
+    `DTSTART:${formatICalDate(new Date(shift.start_time))}`,
+    `DTEND:${formatICalDate(new Date(shift.end_time))}`,
+    `SUMMARY:${escapeICalText(shift.role)}`,
+  ];
+
+  // Build description with notes and organization info
+  const descParts: string[] = [];
+  if (shift.notes) descParts.push(shift.notes);
+  if (shift.organizationName) descParts.push(`Organization: ${shift.organizationName}`);
+  if (shift.teamName) descParts.push(`Team: ${shift.teamName}`);
+
+  if (descParts.length > 0) {
+    lines.push(`DESCRIPTION:${escapeICalText(descParts.join('\\n'))}`);
+  }
+
+  if (shift.location) {
+    lines.push(`LOCATION:${escapeICalText(shift.location)}`);
+  }
+
+  if (organizerName && organizerEmail) {
+    lines.push(`ORGANIZER;CN=${escapeICalText(organizerName)}:mailto:${organizerEmail}`);
+  }
+
+  if (url) {
+    lines.push(`URL:${url}`);
+  }
+
+  // Add categories
+  lines.push('CATEGORIES:VOLUNTEER,SHIFT');
+  if (shift.teamName) {
+    lines.push(`CATEGORIES:${escapeICalText(shift.teamName)}`);
+  }
+
+  // Add status
+  const statusMap: Record<string, string> = {
+    scheduled: 'CONFIRMED',
+    completed: 'CONFIRMED',
+    cancelled: 'CANCELLED',
+    no_show: 'CANCELLED',
+  };
+  lines.push(`STATUS:${statusMap[shift.status] || 'CONFIRMED'}`);
+
+  // Busy time
+  lines.push('TRANSP:OPAQUE');
+
+  lines.push('END:VEVENT');
+
+  return lines.map(foldLine).join(CRLF);
+}
+
+export interface ShiftCalendarOptions {
+  calendarName?: string;
+  calendarDescription?: string;
+  refreshInterval?: number;
+  organizerName?: string;
+  organizerEmail?: string;
+  baseUrl?: string;
+}
+
+/**
+ * Generate an iCalendar feed from volunteer shifts
+ */
+export function generateShiftCalendar(
+  shifts: VolunteerShiftCalendarItem[],
+  options: ShiftCalendarOptions = {}
+): string {
+  const {
+    calendarName = 'My Volunteer Shifts',
+    calendarDescription = 'Your scheduled volunteer shifts',
+    refreshInterval = 1,
+    organizerName = 'Acts 29 Ministry',
+    organizerEmail = 'volunteers@acts29ministry.org',
+    baseUrl = 'https://acts29ministry.org',
+  } = options;
+
+  const lines: string[] = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Acts 29 Ministry//Volunteer Calendar//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${escapeICalText(calendarName)}`,
+    `X-WR-CALDESC:${escapeICalText(calendarDescription)}`,
+    `REFRESH-INTERVAL;VALUE=DURATION:PT${refreshInterval}H`,
+    'X-PUBLISHED-TTL:PT1H',
+  ];
+
+  // Add timezone component for Central Time
+  lines.push(
+    'BEGIN:VTIMEZONE',
+    'TZID:America/Chicago',
+    'BEGIN:DAYLIGHT',
+    'TZOFFSETFROM:-0600',
+    'TZOFFSETTO:-0500',
+    'TZNAME:CDT',
+    'DTSTART:19700308T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU',
+    'END:DAYLIGHT',
+    'BEGIN:STANDARD',
+    'TZOFFSETFROM:-0500',
+    'TZOFFSETTO:-0600',
+    'TZNAME:CST',
+    'DTSTART:19701101T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU',
+    'END:STANDARD',
+    'END:VTIMEZONE'
+  );
+
+  // Add shifts
+  for (const shift of shifts) {
+    if (shift.status !== 'cancelled') {
+      lines.push(
+        generateShiftVEvent({
+          shift,
+          organizerName,
+          organizerEmail,
+          url: `${baseUrl}/admin/volunteers/shifts/${shift.id}`,
+        })
+      );
+    }
+  }
+
+  lines.push('END:VCALENDAR');
+
+  return lines.join(CRLF);
+}
+
+/**
+ * Generate a combined calendar with both events and shifts
+ */
+export function generateCombinedCalendar(
+  events: Event[],
+  shifts: VolunteerShiftCalendarItem[],
+  options: ICalendarOptions & { includePrivateEvents?: boolean } = {}
+): string {
+  const {
+    calendarName = 'My Acts 29 Calendar',
+    calendarDescription = 'Your events and volunteer shifts',
+    refreshInterval = 1,
+    organizerName = 'Acts 29 Ministry',
+    organizerEmail = 'calendar@acts29ministry.org',
+    baseUrl = 'https://acts29ministry.org',
+    includePrivateEvents = false,
+  } = options;
+
+  const lines: string[] = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Acts 29 Ministry//Personal Calendar//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${escapeICalText(calendarName)}`,
+    `X-WR-CALDESC:${escapeICalText(calendarDescription)}`,
+    `REFRESH-INTERVAL;VALUE=DURATION:PT${refreshInterval}H`,
+    'X-PUBLISHED-TTL:PT1H',
+  ];
+
+  // Add timezone component for Central Time
+  lines.push(
+    'BEGIN:VTIMEZONE',
+    'TZID:America/Chicago',
+    'BEGIN:DAYLIGHT',
+    'TZOFFSETFROM:-0600',
+    'TZOFFSETTO:-0500',
+    'TZNAME:CDT',
+    'DTSTART:19700308T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU',
+    'END:DAYLIGHT',
+    'BEGIN:STANDARD',
+    'TZOFFSETFROM:-0500',
+    'TZOFFSETTO:-0600',
+    'TZNAME:CST',
+    'DTSTART:19701101T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU',
+    'END:STANDARD',
+    'END:VTIMEZONE'
+  );
+
+  // Add events
+  for (const event of events) {
+    if (event.is_public || includePrivateEvents) {
+      lines.push(
+        generateVEvent({
+          event,
+          organizerName,
+          organizerEmail,
+          url: `${baseUrl}/calendar/${event.id}`,
+        })
+      );
+    }
+  }
+
+  // Add shifts
+  for (const shift of shifts) {
+    if (shift.status !== 'cancelled') {
+      lines.push(
+        generateShiftVEvent({
+          shift,
+          organizerName,
+          organizerEmail,
+          url: `${baseUrl}/admin/volunteers/shifts/${shift.id}`,
+        })
+      );
+    }
+  }
+
+  lines.push('END:VCALENDAR');
+
+  return lines.join(CRLF);
+}
+
+/**
+ * Generate subscription URLs with custom feed path and name
+ */
+export function generateCustomSubscriptionUrls(
+  baseUrl: string,
+  feedPath: string,
+  calendarName: string
+): CalendarSubscriptionUrls {
+  const icalUrl = `${baseUrl}${feedPath}`;
+  const webcalUrl = icalUrl.replace(/^https?:/, 'webcal:');
+
+  // Google Calendar subscription URL
+  const googleCalendarUrl = `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcalUrl)}`;
+
+  // Outlook online subscription URL
+  const outlookUrl = `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(icalUrl)}&name=${encodeURIComponent(calendarName)}`;
+
+  return {
+    ical: icalUrl,
+    googleCalendar: googleCalendarUrl,
+    outlookOnline: outlookUrl,
+    webcal: webcalUrl,
+  };
+}

@@ -87,18 +87,16 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   }, [resolvedTheme, setTheme]);
 
-  // Prevent flash by not rendering until mounted
-  if (!mounted) {
-    return (
-      <div style={{ visibility: 'hidden' }}>
-        {children}
-      </div>
-    );
-  }
+  const value: ThemeContextType = {
+    theme,
+    resolvedTheme,
+    setTheme,
+    toggleTheme,
+  };
 
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
-      {children}
+    <ThemeContext.Provider value={value}>
+      {mounted ? children : <div style={{ visibility: 'hidden' }}>{children}</div>}
     </ThemeContext.Provider>
   );
 }

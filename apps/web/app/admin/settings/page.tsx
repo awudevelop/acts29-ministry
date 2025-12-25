@@ -13,6 +13,7 @@ import {
   Database,
   ChevronRight,
   Puzzle,
+  Calendar,
 } from 'lucide-react';
 import { mockOrganizations } from '@acts29/database';
 
@@ -40,6 +41,12 @@ const settingsSections = [
     description: 'Manage email and notification preferences',
     icon: Bell,
     href: '/admin/settings/notifications',
+  },
+  {
+    title: 'Calendar',
+    description: 'Manage calendar feeds and sync with Google, Apple, and Outlook',
+    icon: Calendar,
+    href: '/admin/settings/calendar',
   },
   {
     title: 'Email Templates',

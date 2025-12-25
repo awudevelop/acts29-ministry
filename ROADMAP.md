@@ -310,6 +310,146 @@ Organizations have different needs - some run shelters, others focus on food dis
 - [ ] Route scheduling
 - [ ] Mileage tracking
 
+### Phase 14: Calendar Sync & Enhanced Notifications
+
+This phase focuses on two interconnected features: bidirectional calendar sync with external providers and a comprehensive notification system across email and SMS channels.
+
+#### Phase 14A: Notification Preferences & Infrastructure (Foundation)
+User-controlled notification preferences and unified notification queue.
+
+- [ ] Notification preferences database schema
+  - [ ] `notification_preferences` table (user_id, channel, type, enabled, quiet_hours)
+  - [ ] `notification_queue` table (id, user_id, channel, type, content, scheduled_for, sent_at, status)
+  - [ ] `notification_logs` table (id, user_id, channel, type, sent_at, delivery_status, error)
+- [ ] Admin Settings > Notifications page enhancements
+  - [ ] Per-notification-type toggles (events, shifts, donations, prayer, cases)
+  - [ ] Channel preferences (email, SMS, push, in-app)
+  - [ ] Quiet hours configuration (e.g., no SMS between 10pm-7am)
+  - [ ] Digest frequency options (immediate, daily, weekly)
+- [ ] User notification preferences (public portal)
+  - [ ] /account/notifications page for donors/volunteers
+  - [ ] Unsubscribe links in emails
+  - [ ] SMS opt-out handling (STOP keyword)
+- [ ] Notification queue service
+  - [ ] Queue processing with retry logic
+  - [ ] Rate limiting per channel
+  - [ ] Batch sending for digests
+  - [ ] Failure handling and alerting
+
+#### Phase 14B: Email Notifications Enhancement
+Expand email templates and automation triggers.
+
+- [ ] New email templates
+  - [ ] Shift reminder (24h, 2h before)
+  - [ ] Event registration confirmation
+  - [ ] Event reminder (24h, 1h before)
+  - [ ] Weekly volunteer digest
+  - [ ] Case status update
+  - [ ] Prayer request update (new prayers, answered)
+  - [ ] Shelter check-in confirmation
+- [ ] Email automation integration
+  - [ ] Connect automation-service to email-service
+  - [ ] Template variable expansion ({{name}}, {{date}}, etc.)
+  - [ ] Scheduled email campaigns
+  - [ ] A/B testing support (future)
+- [ ] Email analytics
+  - [ ] Open tracking
+  - [ ] Click tracking
+  - [ ] Bounce handling
+  - [ ] Delivery reports
+
+#### Phase 14C: SMS Notifications Enhancement
+Expand Twilio integration with two-way messaging.
+
+- [ ] SMS opt-in/opt-out management
+  - [ ] SMS consent tracking in database
+  - [ ] STOP/START keyword handling
+  - [ ] Opt-in confirmation flow
+  - [ ] Compliance with TCPA regulations
+- [ ] New SMS notification types
+  - [ ] Volunteer shift reminders (configurable timing)
+  - [ ] Urgent case alerts to assigned workers
+  - [ ] Event day-of reminders
+  - [ ] Shelter capacity alerts
+  - [ ] Weather emergency broadcasts
+- [ ] Two-way SMS (Twilio webhooks)
+  - [ ] Incoming message webhook endpoint
+  - [ ] Keyword response handling (YES, NO, INFO)
+  - [ ] Shift confirmation via SMS reply
+  - [ ] Case note additions via SMS
+- [ ] SMS message threading
+  - [ ] Conversation history per user
+  - [ ] Admin inbox for SMS conversations
+
+#### Phase 14D: Calendar Sync - Outbound (iCal Feeds) ✅ COMPLETE
+Public and private calendar subscription feeds.
+
+- [x] iCal feed API endpoints
+  - [x] `/api/calendar/feed.ics` - Public events feed (existing)
+  - [x] `/api/calendar/feed/[token]` - Token-based authenticated feeds
+    - [x] Personal calendar feeds (user's events + shifts)
+    - [x] Team calendar feeds
+    - [x] Organization calendar feeds
+  - [x] Feed type configuration (events, shifts, private events)
+- [x] calendar-service package enhancements
+  - [x] `generateShiftVEvent()` - Volunteer shift calendar events
+  - [x] `generateShiftCalendar()` - Shifts-only calendar feeds
+  - [x] `generateCombinedCalendar()` - Combined events + shifts
+  - [x] `generateCustomSubscriptionUrls()` - Multi-provider URLs
+- [x] Database types for calendar feeds
+  - [x] `CalendarFeedType` (personal, team, organization, public)
+  - [x] `CalendarFeedToken` - Token configuration with include flags
+  - [x] `CalendarFeedSettings` - User preferences
+  - [x] `ConnectedCalendar` - For future inbound sync
+- [x] Calendar subscription management UI
+  - [x] Settings > Calendar page with full management
+  - [x] Public events subscription section
+  - [x] Personal feeds list with create/delete/regenerate
+  - [x] Copy subscription URLs with show/hide toggle
+  - [x] One-click subscribe buttons (Google, Apple, Outlook)
+  - [x] QR codes for mobile subscription
+  - [x] Create Feed modal with type and content configuration
+  - [x] Instructions for each calendar platform
+
+#### Phase 14E: Calendar Sync - Inbound (OAuth Integration)
+Bidirectional sync with external calendar providers.
+
+- [ ] Google Calendar OAuth integration
+  - [ ] OAuth 2.0 consent flow
+  - [ ] Token storage and refresh
+  - [ ] Read events from user's calendar
+  - [ ] Write volunteer shifts to user's calendar
+  - [ ] Conflict detection (shift overlaps with user events)
+- [ ] Microsoft Outlook/365 integration
+  - [ ] Microsoft Graph API setup
+  - [ ] OAuth consent flow
+  - [ ] Calendar read/write operations
+- [ ] Apple Calendar (CalDAV)
+  - [ ] CalDAV client implementation
+  - [ ] iCloud calendar support
+- [ ] Sync settings per user
+  - [ ] Connected calendars list
+  - [ ] Sync direction (one-way, two-way)
+  - [ ] Calendar selection for write-back
+  - [ ] Sync frequency options
+
+#### Phase 14F: Unified Notification Center
+Central hub for all notification management.
+
+- [ ] In-app notification center
+  - [ ] Real-time notifications (WebSocket/SSE)
+  - [ ] Notification drawer in admin TopBar (enhanced)
+  - [ ] Notification history page
+  - [ ] Mark read/unread, archive, delete
+- [ ] Notification preferences dashboard
+  - [ ] Visual overview of all notification settings
+  - [ ] Quick toggles per category
+  - [ ] Test notification button
+- [ ] Admin notification management
+  - [ ] Broadcast messages to all users/segments
+  - [ ] Scheduled announcements
+  - [ ] Notification analytics (sent, opened, clicked)
+
 ## Technical Debt & Improvements
 
 ### High Priority

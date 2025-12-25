@@ -421,3 +421,45 @@ export const defaultEnabledFeatures: FeatureModuleId[] = [
   'case_management',
   'resource_directory',
 ];
+
+// ===========================================
+// Calendar Feed Types
+// ===========================================
+
+export type CalendarFeedType = 'personal' | 'team' | 'organization' | 'public';
+
+export interface CalendarFeedToken {
+  id: string;
+  user_id: string;
+  token: string;
+  feed_type: CalendarFeedType;
+  // For team feeds, the team ID; for org feeds, the org ID
+  scope_id?: string | null;
+  name: string;
+  include_events: boolean;
+  include_shifts: boolean;
+  include_private_events: boolean;
+  is_active: boolean;
+  last_accessed_at?: string | null;
+  created_at: string;
+  expires_at?: string | null;
+}
+
+export interface CalendarFeedSettings {
+  feedTokens: CalendarFeedToken[];
+  defaultIncludeEvents: boolean;
+  defaultIncludeShifts: boolean;
+  syncEnabled: boolean;
+  connectedCalendars: ConnectedCalendar[];
+}
+
+export interface ConnectedCalendar {
+  id: string;
+  provider: 'google' | 'outlook' | 'apple';
+  name: string;
+  email: string;
+  is_active: boolean;
+  sync_direction: 'read' | 'write' | 'both';
+  last_synced_at?: string | null;
+  connected_at: string;
+}

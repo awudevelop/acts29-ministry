@@ -59,6 +59,11 @@ export type {
   FeatureModuleId,
   FeatureModule,
   OrganizationFeatures,
+  // Calendar feed types
+  CalendarFeedType,
+  CalendarFeedToken,
+  CalendarFeedSettings,
+  ConnectedCalendar,
 } from './types';
 
 // Feature module exports

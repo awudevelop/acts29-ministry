@@ -295,10 +295,14 @@ iCalendar generation and subscription service:
 - RFC 5545 compliant iCal generation
 - Full calendar feed generation
 - Single event .ics file generation
+- Volunteer shift calendar generation
+- Combined calendar feeds (events + shifts)
+- Team and organization calendar feeds
 - Subscription URL generation for multiple providers
 - Google Calendar integration URLs
 - Outlook/Office 365 integration URLs
 - Apple Calendar (webcal://) support
+- QR code support for mobile subscription
 
 ### @acts29/email-service (packages/email-service)
 Email template and sending service:
@@ -417,6 +421,14 @@ GET - Calendar subscription URLs
 - Returns URLs for Google Calendar, Outlook, Apple Calendar
 - Includes webcal:// protocol link
 
+### /api/calendar/feed/[token]
+GET - Personalized iCalendar feed with token authentication
+- Personal calendar feeds (user's events + shifts)
+- Team calendar feeds
+- Organization calendar feeds
+- Configurable content inclusion (events, shifts, private events)
+- Secure token-based access
+
 ## Environment Variables
 
 ```env
@@ -475,6 +487,8 @@ apps/web/app/
 │   ├── teams/          # Team management
 │   ├── users/          # User management
 │   └── settings/       # Settings
+│       ├── calendar/   # Calendar subscription management
+│       └── ...
 └── api/                # API routes
 ```
 

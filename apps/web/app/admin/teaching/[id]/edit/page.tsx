@@ -121,10 +121,11 @@ export default function EditTeachingPage() {
   };
 
   const handlePublish = async () => {
+    const publishDate = new Date().toISOString().split('T')[0] ?? '';
     setFormData((prev) => ({
       ...prev,
       is_published: true,
-      published_at: prev.published_at || new Date().toISOString().split('T')[0],
+      published_at: prev.published_at !== '' ? prev.published_at : publishDate,
     }));
   };
 

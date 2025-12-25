@@ -1,6 +1,6 @@
-'use client';
-
-import { Header, Footer, ErrorBoundary } from '@/components';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (

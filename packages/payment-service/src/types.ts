@@ -222,3 +222,68 @@ export const CreateSubscriptionRequestSchema = z.object({
   metadata: z.record(z.string()).optional(),
   startDate: z.date().optional(),
 });
+
+// Payment link types for QR code / shareable link donations
+export type PaymentLinkStatus = 'active' | 'expired' | 'disabled';
+
+export interface CreatePaymentLinkRequest {
+  amount?: AmountInCents; // Optional - donor can choose amount if not set
+  currency: Currency;
+  description: string;
+  organizationId: string;
+  campaignId?: string;
+  allowedPaymentMethods: ('card' | 'ach')[]; // Which methods are allowed
+  coverFeesOption: 'donor_choice' | 'always' | 'never'; // Fee coverage behavior
+  expiresAt?: Date;
+  metadata?: Record<string, string>;
+  successUrl?: string;
+  cancelUrl?: string;
+}
+
+export interface PaymentLink {
+  id: string;
+  url: string;
+  shortCode: string; // For QR code generation and short URLs
+  qrCodeUrl: string; // Pre-generated QR code image URL
+  amount?: AmountInCents;
+  currency: Currency;
+  description: string;
+  organizationId: string;
+  campaignId?: string;
+  allowedPaymentMethods: ('card' | 'ach')[];
+  coverFeesOption: 'donor_choice' | 'always' | 'never';
+  status: PaymentLinkStatus;
+  expiresAt?: Date;
+  metadata?: Record<string, string>;
+  createdAt: Date;
+  updatedAt: Date;
+  totalCollected: AmountInCents; // Running total of donations via this link
+  donationCount: number; // Number of donations via this link
+}
+
+// Fee structure for different payment methods
+export interface PaymentMethodFees {
+  card: {
+    percentage: number; // e.g., 5.0 for 5%
+    fixedCents: number; // e.g., 0 for no fixed fee
+  };
+  ach: {
+    percentage: number; // e.g., 1.0 for 1%
+    fixedCents: number;
+    maxFeeCents?: number; // Optional cap on ACH fees
+  };
+}
+
+export const CreatePaymentLinkRequestSchema = z.object({
+  amount: z.number().positive().optional(),
+  currency: z.enum(['USD', 'EUR', 'GBP', 'CAD']),
+  description: z.string().min(1).max(500),
+  organizationId: z.string(),
+  campaignId: z.string().optional(),
+  allowedPaymentMethods: z.array(z.enum(['card', 'ach'])).min(1),
+  coverFeesOption: z.enum(['donor_choice', 'always', 'never']),
+  expiresAt: z.date().optional(),
+  metadata: z.record(z.string()).optional(),
+  successUrl: z.string().url().optional(),
+  cancelUrl: z.string().url().optional(),
+});

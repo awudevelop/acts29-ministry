@@ -38,7 +38,7 @@ interface MemberWithProfile {
   joinedAt: string;
   firstName: string;
   lastName: string;
-  email: string;
+  phone: string | null;
   avatarUrl: string | null;
   shiftsCompleted: number;
   totalHours: number;
@@ -84,7 +84,7 @@ export default function TeamMembersPage() {
           joinedAt: m.joined_at,
           firstName: profile?.first_name || 'Unknown',
           lastName: profile?.last_name || 'User',
-          email: profile?.email || '',
+          phone: profile?.phone || null,
           avatarUrl: profile?.avatar_url || null,
           shiftsCompleted: memberShifts.length,
           totalHours: Math.round(totalHours),
@@ -113,8 +113,7 @@ export default function TeamMembersPage() {
       result = result.filter(
         (m) =>
           m.firstName.toLowerCase().includes(query) ||
-          m.lastName.toLowerCase().includes(query) ||
-          m.email.toLowerCase().includes(query)
+          m.lastName.toLowerCase().includes(query)
       );
     }
 
@@ -427,7 +426,9 @@ export default function TeamMembersPage() {
                         <Badge variant="default">Member</Badge>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500">{member.email}</p>
+                    {member.phone && (
+                      <p className="text-sm text-gray-500">{member.phone}</p>
+                    )}
                   </div>
                 </div>
 

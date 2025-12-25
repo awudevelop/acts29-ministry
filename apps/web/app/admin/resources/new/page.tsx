@@ -12,7 +12,7 @@ import {
   Select,
   Alert,
 } from '@acts29/admin-ui';
-import { ArrowLeft, Save, Plus } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { type ResourceType } from '@acts29/database';
 
 const resourceTypeOptions = [

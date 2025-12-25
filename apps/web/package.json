@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@acts29/admin-ui": "workspace:*",
+    "@acts29/calendar-service": "workspace:*",
     "@acts29/database": "workspace:*",
+    "@acts29/email-service": "workspace:*",
     "@acts29/ui": "workspace:*",
     "@acts29/validators": "workspace:*",
     "@tanstack/react-table": "^8.11.0",

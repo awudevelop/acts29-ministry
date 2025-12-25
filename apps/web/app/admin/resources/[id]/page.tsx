@@ -17,7 +17,6 @@ import {
   Phone,
   Mail,
   Globe,
-  Clock,
   Users,
   Home,
   Utensils,

@@ -142,12 +142,12 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
   return (
     <div
       className={cn(
-        'flex h-full flex-col bg-gray-900 text-white transition-all duration-300',
+        'flex h-full flex-col bg-gray-900 dark:bg-gray-950 text-white transition-all duration-300',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-gray-800">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-gray-800 dark:border-gray-900">
         {!collapsed && (
           <Link href="/admin" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 font-bold">
@@ -164,7 +164,7 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
         {onCollapse && !collapsed && (
           <button
             onClick={() => onCollapse(true)}
-            className="p-1 rounded hover:bg-gray-800"
+            className="p-1 rounded hover:bg-gray-800 dark:hover:bg-gray-900"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
@@ -188,8 +188,8 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
                       className={cn(
                         'flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                         active
-                          ? 'bg-gray-800 text-white'
-                          : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                          ? 'bg-gray-800 dark:bg-gray-900 text-white'
+                          : 'text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-900 hover:text-white'
                       )}
                     >
                       <item.icon className="h-5 w-5 flex-shrink-0" />
@@ -214,8 +214,8 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
                               className={cn(
                                 'block rounded-lg px-3 py-2 text-sm transition-colors',
                                 pathname === child.href
-                                  ? 'bg-gray-800 text-white'
-                                  : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                                  ? 'bg-gray-800 dark:bg-gray-900 text-white'
+                                  : 'text-gray-400 hover:bg-gray-800 dark:hover:bg-gray-900 hover:text-white'
                               )}
                             >
                               {child.name}
@@ -231,8 +231,8 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                       active
-                        ? 'bg-gray-800 text-white'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-gray-800 dark:bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-900 hover:text-white'
                     )}
                     title={collapsed ? item.name : undefined}
                   >
@@ -247,18 +247,18 @@ export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse,
       </nav>
 
       {/* Bottom section */}
-      <div className="border-t border-gray-800 p-4">
+      <div className="border-t border-gray-800 dark:border-gray-900 p-4">
         {collapsed ? (
           <button
             onClick={() => onCollapse?.(false)}
-            className="flex w-full items-center justify-center rounded-lg p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
+            className="flex w-full items-center justify-center rounded-lg p-2 text-gray-400 hover:bg-gray-800 dark:hover:bg-gray-900 hover:text-white"
           >
             <ChevronLeft className="h-5 w-5 rotate-180" />
           </button>
         ) : (
           <button
             onClick={onSignOut}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:text-white"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 dark:hover:bg-gray-900 hover:text-white"
           >
             <LogOut className="h-5 w-5" />
             <span>Sign Out</span>

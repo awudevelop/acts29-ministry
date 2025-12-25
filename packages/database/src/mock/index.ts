@@ -13,4 +13,5 @@ export {
   mockEventRegistrations,
   mockTeams,
   mockTeamMembers,
+  mockActivities,
 } from './data';

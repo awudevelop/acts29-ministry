@@ -10,8 +10,9 @@ import {
   TextArea,
   Select,
   Alert,
+  Toggle,
 } from '@acts29/admin-ui';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Shirt, Utensils } from 'lucide-react';
 
 export default function NewEventPage() {
   const router = useRouter();
@@ -28,12 +29,14 @@ export default function NewEventPage() {
     end_time: '',
     max_attendees: '',
     is_public: 'true',
+    accepts_clothing: false,
+    accepts_food: false,
     registration_deadline: '',
     contact_email: '',
     contact_phone: '',
   });
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -190,6 +193,56 @@ export default function NewEventPage() {
                 value={formData.registration_deadline}
                 onChange={(e) => handleChange('registration_deadline', e.target.value)}
               />
+            </div>
+          </FormSection>
+        </div>
+
+        {/* Donation Acceptance */}
+        <div className="rounded-xl border bg-white p-6">
+          <FormSection
+            title="Donation Drop-off"
+            description="Will this event accept donations? Enable to allow people to bring items to donate."
+          >
+            <div className="space-y-4">
+              <div className="flex items-start gap-4 rounded-lg border p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-100 text-accent-600">
+                  <Shirt className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-900">Accepts Clothing</h4>
+                      <p className="text-sm text-gray-600">
+                        People can bring clothing donations to this event
+                      </p>
+                    </div>
+                    <Toggle
+                      checked={formData.accepts_clothing}
+                      onChange={(checked) => handleChange('accepts_clothing', checked)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 rounded-lg border p-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+                  <Utensils className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-medium text-gray-900">Accepts Food</h4>
+                      <p className="text-sm text-gray-600">
+                        People can bring food donations to this event
+                      </p>
+                    </div>
+                    <Toggle
+                      checked={formData.accepts_food}
+                      onChange={(checked) => handleChange('accepts_food', checked)}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </FormSection>
         </div>

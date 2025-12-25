@@ -77,45 +77,174 @@ Acts 29 Church for the Unsheltered is a ministry application built to support ho
     - [x] Member stats display
   - [x] Team scoping for shifts, resources, and content
 
-## In Progress
+### Phase 7: Real-time Features (Complete)
+- [x] Live activity feeds
+  - [x] ActivityFeed component with real-time updates
+  - [x] ActivityFeedCompact for sidebars
+  - [x] Activity types for all major events (donations, shifts, cases, etc.)
+  - [x] Mock activities for development
+- [x] Real-time notifications
+  - [x] NotificationCenter component in TopBar
+  - [x] useNotifications hook for state management
+  - [x] Mark as read / mark all read functionality
+  - [x] Click-through navigation to related items
+- [x] Shift status updates
+  - [x] useRealtimeSubscription hook (Supabase realtime)
+  - [x] useRealtimeShifts hook with toast notifications
+  - [x] LiveIndicator component showing connection status
+  - [x] useLiveStats hook for dashboard statistics
+- [x] Real-time hooks package (@acts29/hooks)
+  - [x] useActivityFeed with activity converters
+  - [x] useRealtimeShifts for volunteer shift tracking
+  - [x] useLiveStats for dashboard metrics
+
+## Next Priority: Phase 6 - Authentication & Security
+
+This phase will connect the real Supabase backend and enable the real-time features built in Phase 7.
 
 ### Phase 6: Authentication & Security
-- [ ] Supabase authentication integration
-- [ ] Role-based access control implementation
-- [ ] Protected routes
+- [ ] Supabase project setup and configuration
+  - [ ] Create Supabase project
+  - [ ] Configure environment variables
+  - [ ] Set up database schema migrations
+- [ ] Authentication integration
+  - [ ] Email/password authentication
+  - [ ] OAuth providers (Google, optional)
+  - [ ] Password reset flow
+  - [ ] Email verification
+- [ ] Role-based access control
+  - [ ] Implement RLS (Row Level Security) policies
+  - [ ] Role-based route protection middleware
+  - [ ] Permission checks in UI components
 - [ ] Session management
+  - [ ] Server-side session handling
+  - [ ] Token refresh logic
+  - [ ] Secure cookie configuration
+- [ ] Convert mock data to live database
+  - [ ] Run database migrations
+  - [ ] Seed initial data for Springfield partners
+  - [ ] Connect existing pages to real data
 
 ## Planned Features
 
-### Phase 7: Real-time Features
-- [ ] Live activity feeds
-- [ ] Real-time notifications
-- [ ] Shift status updates
-
 ### Phase 8: Mobile Optimization
 - [ ] Progressive Web App (PWA)
+  - [ ] Service worker configuration
+  - [ ] App manifest with dark mode support
+  - [ ] Install prompts
 - [ ] Mobile-optimized layouts
+  - [ ] Responsive admin navigation
+  - [ ] Touch-friendly data tables
+  - [ ] Mobile form improvements
+  - [ ] Mobile-friendly theme toggle
 - [ ] Offline support for key features
+  - [ ] Cached resource directory
+  - [ ] Offline prayer submissions
+  - [ ] Background sync
+  - [ ] Offline theme persistence
 
 ### Phase 9: Reporting & Analytics
 - [ ] Donation reports
+  - [ ] Monthly/yearly summaries
+  - [ ] Donor retention metrics
+  - [ ] Export to CSV/PDF
 - [ ] Volunteer hour tracking
+  - [ ] Individual volunteer reports
+  - [ ] Team comparisons
+  - [ ] Trend analysis
 - [ ] Case outcome metrics
+  - [ ] Success rates by need type
+  - [ ] Time-to-resolution tracking
+  - [ ] Partner effectiveness
 - [ ] Ministry impact dashboard
+  - [ ] Visual charts with Recharts
+  - [ ] Year-over-year comparisons
+  - [ ] Goal tracking
 
-### Phase 10: Integrations
-- [ ] Email marketing integration
-- [ ] SMS notifications
-- [ ] Calendar sync (Google, Apple)
-- [ ] Payment processing for donations
+### Phase 10: Integrations (Complete)
+- [x] Email marketing integration
+  - [x] Newsletter signup
+  - [x] Automated donor updates
+  - [x] Event reminders
+- [x] SMS notifications
+  - [x] Shift reminders
+  - [x] Emergency alerts
+  - [x] Prayer request updates
+- [x] Calendar sync (Google, Apple) - Complete
+
+### Phase 11: Automation Engine (Complete)
+- [x] Zapier-style workflow automation
+  - [x] Visual automation builder
+  - [x] 20+ trigger types (donations, volunteers, events, cases, prayer, scheduled)
+  - [x] 10+ action types (email, SMS, Slack, webhooks, tasks, lists)
+  - [x] Template variable support ({{donorName}}, etc.)
+  - [x] Condition-based branching
+  - [x] Delay steps for drip campaigns
+- [x] Pre-built automation templates (15+ templates)
+  - [x] Welcome new donor
+  - [x] Volunteer shift reminders
+  - [x] Prayer request notifications
+  - [x] Urgent case alerts
+  - [x] Recurring donation follow-ups
+  - [x] Event registration confirmations
+  - [x] Weekly/monthly scheduled emails
+- [x] Automation management UI
+  - [x] Automations list with toggle on/off
+  - [x] Visual workflow builder
+  - [x] Template library browser
+  - [x] Run history with step-by-step logs
+- [x] Automation service package (@acts29/automation-service)
+
+### Phase 12: Dark Mode & Theming (Complete)
+- [x] Theme system implementation
+  - [x] ThemeProvider with React Context
+  - [x] Light/Dark/System preference options
+  - [x] LocalStorage persistence
+  - [x] System preference detection via matchMedia
+  - [x] Flash prevention script
+- [x] ThemeToggle component
+  - [x] Icon variant (sun/moon button)
+  - [x] Dropdown variant (menu with options)
+  - [x] Switch variant (toggle buttons)
+- [x] Public website dark mode
+  - [x] Header with theme toggle
+  - [x] Footer styling
+  - [x] All page components
+- [x] Admin portal dark mode
+  - [x] AdminLayout with dark backgrounds
+  - [x] Sidebar navigation
+  - [x] TopBar with theme toggle slot
+  - [x] PageHeader component (new)
+  - [x] All admin-ui components updated
+    - [x] StatCard, DataTable, EmptyState
+    - [x] Badge, Pagination
+    - [x] Input, Select, Textarea
+    - [x] Alert, ConfirmDialog
+- [x] Tailwind configuration
+  - [x] `darkMode: 'class'` enabled
+  - [x] Consistent dark palette
 
 ## Technical Debt & Improvements
 
+### High Priority
 - [ ] Convert mock data to Supabase database
+- [x] Fix payment-service TypeScript errors
+- [x] Add email-service react-dom/server dependency
+
+### Medium Priority
 - [ ] Add comprehensive test suite
+  - [ ] Unit tests for hooks
+  - [ ] Component tests for UI
+  - [ ] Integration tests for pages
 - [ ] Performance optimization
+  - [ ] Image optimization
+  - [ ] Code splitting analysis
+  - [ ] Bundle size reduction
+
+### Low Priority
 - [ ] Accessibility audit and improvements
 - [ ] API documentation
+- [ ] Developer onboarding guide
 
 ## Architecture
 
@@ -128,10 +257,17 @@ Acts29Ministry/
 │           ├── admin/          # Admin portal
 │           └── api/            # API routes
 ├── packages/
-│   ├── ui/                     # Shared UI components
-│   ├── admin-ui/               # Admin-specific components
-│   ├── database/               # Database types and mock data
-│   └── email-service/          # Email templates and sending
+│   ├── ui/                     # Shared UI components (Button, Card, etc.)
+│   ├── admin-ui/               # Admin components (DataTable, ActivityFeed, etc.)
+│   ├── database/               # Database types, mock data, Supabase client
+│   ├── hooks/                  # React hooks (realtime, auth, forms, etc.)
+│   ├── automation-service/     # Zapier-style workflow automation engine
+│   ├── calendar-service/       # iCal generation and calendar subscriptions
+│   ├── email-service/          # Email templates and Resend integration
+│   ├── payment-service/        # Payment provider abstraction (HelloPayments, Stripe)
+│   ├── pdf-service/            # PDF generation for receipts
+│   ├── sms-service/            # SMS notifications via Twilio
+│   └── validators/             # Zod validation schemas
 └── supabase/                   # Database migrations and config
 ```
 

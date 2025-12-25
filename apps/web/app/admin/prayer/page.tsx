@@ -19,17 +19,13 @@ import {
   HeartHandshake,
   CheckCircle,
   Clock,
-  Users,
   MoreVertical,
   Filter,
   Heart,
-  MessageCircle,
   User,
   UserX,
 } from 'lucide-react';
 import { mockPrayerRequests, mockProfiles } from '@acts29/database';
-
-type PrayerRequest = (typeof mockPrayerRequests)[number];
 
 export default function PrayerAdminPage() {
   const router = useRouter();

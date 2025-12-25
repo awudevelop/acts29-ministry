@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import Link from 'next/link';
 import {
@@ -13,6 +14,24 @@ import {
   BookOpen,
   ArrowRight,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description:
+    'Acts29 Church for the Unsheltered is a 501(c)(3) nonprofit providing spiritual and basic life essentials to individuals experiencing homelessness in Springfield, IL.',
+  openGraph: {
+    title: 'About Acts29 Ministry',
+    description:
+      'A 501(c)(3) nonprofit providing spiritual and basic life essentials to individuals experiencing homelessness.',
+    images: ['/images/og-about.jpg'],
+  },
+  twitter: {
+    title: 'About Acts29 Ministry',
+    description:
+      'A 501(c)(3) nonprofit providing spiritual and basic life essentials to individuals experiencing homelessness.',
+    images: ['/images/og-about.jpg'],
+  },
+};
 
 export default function AboutPage() {
   return (

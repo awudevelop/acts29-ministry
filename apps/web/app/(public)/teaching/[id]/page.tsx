@@ -11,9 +11,9 @@ import {
   Video,
   Headphones,
   Calendar,
-  Share2,
 } from 'lucide-react';
 import { mockContent, mockProfiles, mockOrganizations, type ContentType } from '@acts29/database';
+import { ShareButtons } from '@/components';
 
 const contentTypeConfig: Record<
   ContentType,
@@ -99,19 +99,6 @@ export default function TeachingDetailPage() {
       })
     : null;
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({
-        title: content.title,
-        text: content.description || '',
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
@@ -156,13 +143,11 @@ export default function TeachingDetailPage() {
           </div>
 
           <div className="mt-6">
-            <button
-              onClick={handleShare}
-              className="inline-flex items-center gap-2 rounded-lg border border-primary-400 px-4 py-2 text-sm font-medium text-primary-200 transition hover:bg-primary-700 hover:text-white"
-            >
-              <Share2 className="h-4 w-4" />
-              Share
-            </button>
+            <ShareButtons
+              url={`/teaching/${content.id}`}
+              title={content.title}
+              description={content.description || undefined}
+            />
           </div>
         </div>
       </section>

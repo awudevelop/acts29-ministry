@@ -268,7 +268,7 @@ export default function TeamsAdminPage() {
           title="Active Teams"
           value={stats.activeTeams}
           icon={CheckCircle}
-          trend={{ value: 100, isPositive: true }}
+          trend="up"
         />
         <StatCard
           title="Total Members"
@@ -279,7 +279,6 @@ export default function TeamsAdminPage() {
           title="Unique Members"
           value={stats.uniqueMembers}
           icon={Users}
-          description="across all teams"
         />
       </div>
 
@@ -352,6 +351,8 @@ export default function TeamsAdminPage() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
+              totalItems={filteredTeams.length}
+              pageSize={pageSize}
               onPageChange={setCurrentPage}
             />
           </div>

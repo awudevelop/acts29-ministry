@@ -211,6 +211,8 @@ export interface Database {
           max_attendees: number | null;
           registered: number;
           is_public: boolean;
+          accepts_clothing: boolean;
+          accepts_food: boolean;
           status: EventStatus;
           created_at: string;
           updated_at: string;
@@ -305,3 +307,37 @@ export type Event = Database['public']['Tables']['events']['Row'];
 export type EventRegistration = Database['public']['Tables']['event_registrations']['Row'];
 export type Team = Database['public']['Tables']['teams']['Row'];
 export type TeamMember = Database['public']['Tables']['team_members']['Row'];
+
+// Activity types for real-time feeds
+export type ActivityType =
+  | 'donation_received'
+  | 'donation_refunded'
+  | 'volunteer_checked_in'
+  | 'volunteer_checked_out'
+  | 'shift_scheduled'
+  | 'shift_completed'
+  | 'shift_cancelled'
+  | 'case_created'
+  | 'case_updated'
+  | 'case_closed'
+  | 'event_created'
+  | 'event_registration'
+  | 'prayer_request'
+  | 'content_published'
+  | 'team_member_added'
+  | 'resource_updated';
+
+export interface Activity {
+  id: string;
+  type: ActivityType;
+  title: string;
+  description?: string;
+  actor?: {
+    id: string;
+    name: string;
+    avatarUrl?: string | null;
+  };
+  metadata?: Record<string, unknown>;
+  timestamp: string;
+  read?: boolean;
+}

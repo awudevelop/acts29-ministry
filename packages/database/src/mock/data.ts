@@ -18,6 +18,7 @@ import type {
   EventRegistration,
   Team,
   TeamMember,
+  Activity,
 } from '../types';
 
 // ===========================================
@@ -217,7 +218,7 @@ export const mockProfiles: Profile[] = [
 // RESOURCES
 // ===========================================
 
-export const mockResources: (Resource & { team_id?: string | null })[] = [
+export const mockResources: Resource[] = [
   // HELPING HANDS RESOURCES
   {
     id: '770e8400-e29b-41d4-a716-446655440001',
@@ -250,6 +251,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440002',
     organization_id: '550e8400-e29b-41d4-a716-446655440001',
+    team_id: null,
     name: 'Helping Hands On-Site Health Clinic',
     type: 'clinic',
     description: 'On-site health clinic operated by Central Counties Health Center. Provides medical care, help obtaining prescriptions, and health services for shelter residents.',
@@ -278,6 +280,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440003',
     organization_id: '550e8400-e29b-41d4-a716-446655440002',
+    team_id: null,
     name: 'Inner City Mission Family Shelter',
     type: 'shelter',
     description: 'Shelter for homeless children, their parents, and single women. Provides safe environment with Christian mentorship, teaching, and tools to obtain permanent housing.',
@@ -305,6 +308,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440004',
     organization_id: '550e8400-e29b-41d4-a716-446655440002',
+    team_id: null,
     name: 'Inner City Mission Education & Counseling',
     type: 'counseling',
     description: 'Christian counseling and education programs focused on mental and spiritual transformation. Helping individuals find Shalom with God, themselves, and others.',
@@ -333,6 +337,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440005',
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
+    team_id: null,
     name: 'Washington Street Mission Day Services',
     type: 'other',
     description: 'Daily services for those in need including hot meals, coffee, showers, laundry, and clothing. Over 100 individuals served daily with love and compassion.',
@@ -360,6 +365,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440006',
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
+    team_id: null,
     name: 'Washington Street Mission Transition House',
     type: 'shelter',
     description: 'Transitional housing program helping individuals move from homelessness to permanent housing. Offers reduced-cost housing with support services.',
@@ -387,6 +393,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440007',
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
+    team_id: null,
     name: 'Washington Street Mission Clothing Ministry',
     type: 'clothing',
     description: 'Free clothing distribution for anyone in need. Includes seasonal clothing, shoes, and personal care items.',
@@ -415,6 +422,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440008',
     organization_id: '550e8400-e29b-41d4-a716-446655440005',
+    team_id: null,
     name: "St. John's Breadline",
     type: 'food_bank',
     description: 'Serving 400-500 free meals daily to low-income and homeless individuals. One of the most vital meal programs in Springfield.',
@@ -442,6 +450,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440009',
     organization_id: '550e8400-e29b-41d4-a716-446655440004',
+    team_id: null,
     name: 'Salvation Army Food Pantry - Springfield',
     type: 'food_bank',
     description: 'Emergency food pantry available every 30 days during times of need. Requires ID for adults and medical cards or birth certificates for children.',
@@ -469,6 +478,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440010',
     organization_id: '550e8400-e29b-41d4-a716-446655440007',
+    team_id: null,
     name: 'Kumler Outreach Food Pantry',
     type: 'food_bank',
     description: 'Choice food pantry where individuals select their own food. Requires referral from social service agency. Can access once every 30 days.',
@@ -496,6 +506,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440011',
     organization_id: '550e8400-e29b-41d4-a716-446655440008',
+    team_id: null,
     name: 'Grace Lutheran Food Pantry',
     type: 'food_bank',
     description: 'All-volunteer pantry providing food without referral. Offers non-perishables, meat, milk, bread, eggs, fresh produce, and toiletries. Special homeless bags available.',
@@ -523,6 +534,7 @@ export const mockResources: (Resource & { team_id?: string | null })[] = [
   {
     id: '770e8400-e29b-41d4-a716-446655440012',
     organization_id: '550e8400-e29b-41d4-a716-446655440006',
+    team_id: null,
     name: 'Central Illinois Foodbank Distribution',
     type: 'food_bank',
     description: 'Regional food bank distribution center serving 21 Central Illinois counties. Partners with local pantries and operates mobile food pantry program.',
@@ -821,6 +833,7 @@ export const mockContent: Content[] = [
     id: 'bb0e8400-e29b-41d4-a716-446655440001',
     organization_id: '550e8400-e29b-41d4-a716-446655440001',
     author_id: '660e8400-e29b-41d4-a716-446655440001',
+    team_id: null,
     title: 'The Heart of Service: Matthew 25',
     type: 'sermon',
     description: 'A powerful message about serving the least of these and how it transforms both the giver and receiver. Recorded at Helping Hands Chapel.',
@@ -836,6 +849,7 @@ export const mockContent: Content[] = [
     id: 'bb0e8400-e29b-41d4-a716-446655440002',
     organization_id: '550e8400-e29b-41d4-a716-446655440002',
     author_id: '660e8400-e29b-41d4-a716-446655440002',
+    team_id: null,
     title: 'Finding Shalom: Peace with God, Self, and Others',
     type: 'devotional',
     description: 'A devotional reflection from Inner City Mission on the journey from brokenness to wholeness.',
@@ -857,6 +871,7 @@ Today, take a moment to consider: Where in your life do you need Shalom? Where a
     id: 'bb0e8400-e29b-41d4-a716-446655440003',
     organization_id: '550e8400-e29b-41d4-a716-446655440003',
     author_id: '660e8400-e29b-41d4-a716-446655440003',
+    team_id: null,
     title: 'From Addiction to Purpose: Kevin\'s Story',
     type: 'testimony',
     description: 'How one man found freedom from addiction and a new calling through Washington Street Mission.',
@@ -880,6 +895,7 @@ What I learned at Washington Street Mission is that love is patient. These peopl
     id: 'bb0e8400-e29b-41d4-a716-446655440004',
     organization_id: '550e8400-e29b-41d4-a716-446655440001',
     author_id: '660e8400-e29b-41d4-a716-446655440001',
+    team_id: null,
     title: 'Governor Pritzker Announces $2M for Springfield Homeless Services',
     type: 'video',
     description: 'Watch the announcement of major new funding for Helping Hands and Springfield homeless services - December 2025.',
@@ -895,6 +911,7 @@ What I learned at Washington Street Mission is that love is patient. These peopl
     id: 'bb0e8400-e29b-41d4-a716-446655440005',
     organization_id: '550e8400-e29b-41d4-a716-446655440002',
     author_id: '660e8400-e29b-41d4-a716-446655440005',
+    team_id: null,
     title: 'A Mother\'s Journey: Finding Hope at Inner City Mission',
     type: 'testimony',
     description: 'Sarah\'s story of escaping domestic violence and building a new life for her family.',
@@ -1025,6 +1042,8 @@ export const mockEvents: Event[] = [
     max_attendees: 500,
     registered: 423,
     is_public: true,
+    accepts_clothing: false,
+    accepts_food: true,
     status: 'upcoming',
     created_at: '2024-11-01T00:00:00Z',
     updated_at: '2024-11-01T00:00:00Z',
@@ -1039,6 +1058,8 @@ export const mockEvents: Event[] = [
     max_attendees: 50,
     registered: 32,
     is_public: false,
+    accepts_clothing: false,
+    accepts_food: false,
     status: 'upcoming',
     created_at: '2024-12-01T00:00:00Z',
     updated_at: '2024-12-01T00:00:00Z',
@@ -1046,13 +1067,15 @@ export const mockEvents: Event[] = [
   {
     id: 'ev0e8400-e29b-41d4-a716-446655440003',
     title: 'Monthly Food Distribution',
-    description: 'Partner with Central Illinois Foodbank for monthly food distribution to families in need.',
+    description: 'Partner with Central Illinois Foodbank for monthly food distribution to families in need. Bring non-perishable food items to donate.',
     location: 'Washington Street Mission',
     start_time: '2025-01-15T08:00:00Z',
     end_time: '2025-01-15T14:00:00Z',
     max_attendees: null,
     registered: 156,
     is_public: true,
+    accepts_clothing: false,
+    accepts_food: true,
     status: 'upcoming',
     created_at: '2024-12-10T00:00:00Z',
     updated_at: '2024-12-10T00:00:00Z',
@@ -1060,13 +1083,15 @@ export const mockEvents: Event[] = [
   {
     id: 'ev0e8400-e29b-41d4-a716-446655440004',
     title: 'Winter Coat Drive Kickoff',
-    description: 'Launch of annual winter coat drive. Collection points throughout Springfield.',
+    description: 'Launch of annual winter coat drive. Collection points throughout Springfield. Bring gently used coats, jackets, and winter clothing.',
     location: 'Multiple Locations',
     start_time: '2024-11-01T00:00:00Z',
     end_time: '2024-12-15T00:00:00Z',
     max_attendees: null,
     registered: 89,
     is_public: true,
+    accepts_clothing: true,
+    accepts_food: false,
     status: 'completed',
     created_at: '2024-10-01T00:00:00Z',
     updated_at: '2024-12-15T00:00:00Z',
@@ -1081,6 +1106,8 @@ export const mockEvents: Event[] = [
     max_attendees: 100,
     registered: 45,
     is_public: true,
+    accepts_clothing: false,
+    accepts_food: false,
     status: 'upcoming',
     created_at: '2024-12-15T00:00:00Z',
     updated_at: '2024-12-15T00:00:00Z',
@@ -1095,9 +1122,59 @@ export const mockEvents: Event[] = [
     max_attendees: 300,
     registered: 128,
     is_public: true,
+    accepts_clothing: false,
+    accepts_food: false,
     status: 'upcoming',
     created_at: '2024-12-01T00:00:00Z',
     updated_at: '2024-12-01T00:00:00Z',
+  },
+  {
+    id: 'ev0e8400-e29b-41d4-a716-446655440007',
+    title: 'Spring Clothing Drive',
+    description: 'Collecting spring and summer clothing for families transitioning out of shelters. All sizes needed, especially children\'s clothing.',
+    location: 'Inner City Mission',
+    start_time: '2025-03-01T09:00:00Z',
+    end_time: '2025-03-15T17:00:00Z',
+    max_attendees: null,
+    registered: 34,
+    is_public: true,
+    accepts_clothing: true,
+    accepts_food: false,
+    status: 'upcoming',
+    created_at: '2025-01-15T00:00:00Z',
+    updated_at: '2025-01-15T00:00:00Z',
+  },
+  {
+    id: 'ev0e8400-e29b-41d4-a716-446655440008',
+    title: 'Back to School Supply & Clothing Drive',
+    description: 'Help families prepare for back to school with supplies and clothing donations. School uniforms especially needed.',
+    location: 'Helping Hands Community Center',
+    start_time: '2025-08-01T08:00:00Z',
+    end_time: '2025-08-10T18:00:00Z',
+    max_attendees: null,
+    registered: 0,
+    is_public: true,
+    accepts_clothing: true,
+    accepts_food: false,
+    status: 'upcoming',
+    created_at: '2025-01-20T00:00:00Z',
+    updated_at: '2025-01-20T00:00:00Z',
+  },
+  {
+    id: 'ev0e8400-e29b-41d4-a716-446655440009',
+    title: 'Community Pantry Day',
+    description: 'Monthly community pantry event. Accepting canned goods, dry goods, and fresh produce donations.',
+    location: 'St. John\'s Breadline',
+    start_time: '2025-02-01T10:00:00Z',
+    end_time: '2025-02-01T15:00:00Z',
+    max_attendees: null,
+    registered: 67,
+    is_public: true,
+    accepts_clothing: false,
+    accepts_food: true,
+    status: 'upcoming',
+    created_at: '2025-01-10T00:00:00Z',
+    updated_at: '2025-01-10T00:00:00Z',
   },
 ];
 
@@ -1433,5 +1510,155 @@ export const mockTeamMembers: TeamMember[] = [
     joined_at: '2024-03-01T00:00:00Z',
     created_at: '2024-03-01T00:00:00Z',
     updated_at: '2024-03-01T00:00:00Z',
+  },
+];
+
+// ===========================================
+// MOCK ACTIVITIES - For real-time feed development
+// ===========================================
+
+// Helper to generate recent timestamps
+function getRecentTimestamp(minutesAgo: number): string {
+  const date = new Date();
+  date.setMinutes(date.getMinutes() - minutesAgo);
+  return date.toISOString();
+}
+
+export const mockActivities: Activity[] = [
+  {
+    id: 'activity-001',
+    type: 'donation_received',
+    title: 'donated $250.00',
+    description: 'Monthly recurring donation',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440008',
+      name: 'Sarah Chen',
+      avatarUrl: null,
+    },
+    metadata: { donationId: 'don-001', type: 'monetary' },
+    timestamp: getRecentTimestamp(5),
+    read: false,
+  },
+  {
+    id: 'activity-002',
+    type: 'volunteer_checked_in',
+    title: 'checked in for Meal Service shift',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440004',
+      name: 'Jennifer Martinez',
+      avatarUrl: null,
+    },
+    metadata: { shiftId: 'shift-001' },
+    timestamp: getRecentTimestamp(12),
+    read: false,
+  },
+  {
+    id: 'activity-003',
+    type: 'case_created',
+    title: 'created a new case for Marcus Johnson',
+    description: 'Needs: housing, employment assistance',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440005',
+      name: 'Angela Wilson',
+      avatarUrl: null,
+    },
+    metadata: { caseId: 'case-001', status: 'active' },
+    timestamp: getRecentTimestamp(25),
+    read: false,
+  },
+  {
+    id: 'activity-004',
+    type: 'shift_completed',
+    title: 'completed their Outreach shift',
+    description: 'Served 15 individuals downtown',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440001',
+      name: 'Robert Gillespie',
+      avatarUrl: null,
+    },
+    metadata: { shiftId: 'shift-002' },
+    timestamp: getRecentTimestamp(45),
+    read: true,
+  },
+  {
+    id: 'activity-005',
+    type: 'event_registration',
+    title: 'registered for Christmas Meal Service',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440009',
+      name: 'Michael Brown',
+      avatarUrl: null,
+    },
+    metadata: { eventId: 'event-001' },
+    timestamp: getRecentTimestamp(60),
+    read: true,
+  },
+  {
+    id: 'activity-006',
+    type: 'prayer_request',
+    title: 'submitted a prayer request',
+    description: 'Prayers for family reconciliation',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440010',
+      name: 'Lisa Thompson',
+      avatarUrl: null,
+    },
+    metadata: { prayerId: 'prayer-001' },
+    timestamp: getRecentTimestamp(90),
+    read: true,
+  },
+  {
+    id: 'activity-007',
+    type: 'donation_received',
+    title: 'donated $100.00',
+    description: 'In honor of my grandmother',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440011',
+      name: 'David Miller',
+      avatarUrl: null,
+    },
+    metadata: { donationId: 'don-002', type: 'monetary' },
+    timestamp: getRecentTimestamp(120),
+    read: true,
+  },
+  {
+    id: 'activity-008',
+    type: 'content_published',
+    title: 'published devotional "Hope in the Storm"',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440002',
+      name: 'David Thompson',
+      avatarUrl: null,
+    },
+    metadata: { contentId: 'content-001', contentType: 'devotional' },
+    timestamp: getRecentTimestamp(180),
+    read: true,
+  },
+  {
+    id: 'activity-009',
+    type: 'team_member_added',
+    title: 'joined the Outreach Team',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440012',
+      name: 'Rachel Adams',
+      avatarUrl: null,
+    },
+    metadata: { teamId: 'team-001' },
+    timestamp: getRecentTimestamp(240),
+    read: true,
+  },
+  {
+    id: 'activity-010',
+    type: 'case_closed',
+    title: 'closed case for Thomas Williams',
+    description: 'Successfully housed at Helping Hands transitional unit',
+    actor: {
+      id: '660e8400-e29b-41d4-a716-446655440005',
+      name: 'Angela Wilson',
+      avatarUrl: null,
+    },
+    metadata: { caseId: 'case-002', status: 'closed' },
+    timestamp: getRecentTimestamp(300),
+    read: true,
   },
 ];

@@ -15,6 +15,7 @@ export {
   mockEventRegistrations,
   mockTeams,
   mockTeamMembers,
+  mockActivities,
 } from './mock';
 
 // Real client exports - note: requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env vars
@@ -53,4 +54,6 @@ export type {
   EventRegistration,
   Team,
   TeamMember,
+  ActivityType,
+  Activity,
 } from './types';

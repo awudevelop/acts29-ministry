@@ -64,20 +64,20 @@ export function DataTable<TData>({
 
   if (isLoading) {
     return (
-      <div className="rounded-lg border bg-white">
+      <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800">
         <div className="animate-pulse">
-          <div className="border-b px-6 py-4">
+          <div className="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
             <div className="flex gap-8">
               {[...Array(columns.length)].map((_, i) => (
-                <div key={i} className="h-4 w-24 rounded bg-gray-200" />
+                <div key={i} className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700" />
               ))}
             </div>
           </div>
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="border-b px-6 py-4 last:border-0">
+            <div key={i} className="border-b border-gray-200 dark:border-gray-700 px-6 py-4 last:border-0">
               <div className="flex gap-8">
                 {[...Array(columns.length)].map((_, j) => (
-                  <div key={j} className="h-4 w-24 rounded bg-gray-100" />
+                  <div key={j} className="h-4 w-24 rounded bg-gray-100 dark:bg-gray-700" />
                 ))}
               </div>
             </div>
@@ -98,10 +98,10 @@ export function DataTable<TData>({
   }
 
   return (
-    <div className="rounded-lg border bg-white overflow-hidden">
+    <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 overflow-hidden transition-colors">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-900">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -112,8 +112,8 @@ export function DataTable<TData>({
                     <th
                       key={header.id}
                       className={cn(
-                        'px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500',
-                        canSort && 'cursor-pointer select-none hover:bg-gray-100'
+                        'px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400',
+                        canSort && 'cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-800'
                       )}
                       onClick={header.column.getToggleSortingHandler()}
                     >
@@ -125,7 +125,7 @@ export function DataTable<TData>({
                               header.getContext()
                             )}
                         {canSort && (
-                          <span className="text-gray-400">
+                          <span className="text-gray-400 dark:text-gray-500">
                             {sorted === 'asc' ? (
                               <ChevronUp className="h-4 w-4" />
                             ) : sorted === 'desc' ? (
@@ -142,21 +142,21 @@ export function DataTable<TData>({
               </tr>
             ))}
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
                 className={cn(
                   'transition-colors',
-                  onRowClick && 'cursor-pointer hover:bg-gray-50',
-                  row.getIsSelected() && 'bg-primary-50'
+                  onRowClick && 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700',
+                  row.getIsSelected() && 'bg-primary-50 dark:bg-primary-900/20'
                 )}
                 onClick={() => onRowClick?.(row.original)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="whitespace-nowrap px-6 py-4 text-sm text-gray-900"
+                    className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

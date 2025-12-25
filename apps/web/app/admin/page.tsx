@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   DollarSign,
@@ -9,8 +11,8 @@ import {
   FileText,
   ArrowRight,
 } from 'lucide-react';
-import { StatCard, formatCurrency, formatDate } from '@acts29/admin-ui';
-import { mockDonations, mockCases, mockVolunteerShifts, mockStats } from '@acts29/database';
+import { StatCard, ActivityFeed, formatCurrency, formatDate } from '@acts29/admin-ui';
+import { mockDonations, mockCases, mockVolunteerShifts, mockStats, mockActivities } from '@acts29/database';
 
 // Recent donations component
 function RecentDonations() {
@@ -230,13 +232,21 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Content Grid */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <RecentDonations />
-        <ActiveCases />
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-6">
+          <RecentDonations />
+          <UpcomingShifts />
+        </div>
+        <div className="space-y-6">
+          <ActivityFeed
+            activities={mockActivities}
+            title="Recent Activity"
+            maxItems={8}
+            onViewAll={() => {}}
+          />
+          <ActiveCases />
+        </div>
       </div>
-
-      {/* Upcoming Shifts */}
-      <UpcomingShifts />
     </div>
   );
 }

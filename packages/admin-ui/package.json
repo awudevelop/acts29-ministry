@@ -14,6 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@acts29/database": "workspace:*",
     "@acts29/ui": "workspace:*",
     "next": "^14.1.0",
     "@radix-ui/react-dialog": "^1.0.5",

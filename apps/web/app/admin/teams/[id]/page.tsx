@@ -64,7 +64,6 @@ export default function TeamDashboardPage() {
   }, [team]);
 
   const leads = teamMembers.filter((m) => m.role === 'lead');
-  const members = teamMembers.filter((m) => m.role === 'member');
 
   // Get team shifts
   const teamShifts = React.useMemo(() => {

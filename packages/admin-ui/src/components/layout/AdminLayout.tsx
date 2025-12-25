@@ -16,18 +16,20 @@ interface AdminLayoutProps {
   };
   organizationName?: string;
   onSignOut?: () => void;
+  notificationSlot?: React.ReactNode;
+  themeToggleSlot?: React.ReactNode;
 }
 
-export function AdminLayout({ children, user, organizationName, onSignOut }: AdminLayoutProps) {
+export function AdminLayout({ children, user, organizationName, onSignOut, notificationSlot, themeToggleSlot }: AdminLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900 transition-colors">
       {/* Mobile sidebar backdrop */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/50 dark:bg-black/70 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -61,6 +63,8 @@ export function AdminLayout({ children, user, organizationName, onSignOut }: Adm
           user={user}
           organizationName={organizationName}
           onMenuClick={() => setMobileMenuOpen(true)}
+          notificationSlot={notificationSlot}
+          themeToggleSlot={themeToggleSlot}
         />
         <main className="flex-1 overflow-y-auto">
           <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">

@@ -131,14 +131,95 @@ export default function GetInvolvedPage() {
         </div>
       </section>
 
-      {/* Navigation Links */}
-      <section className="bg-white py-6 border-b">
+      {/* Five Ways to Get Involved */}
+      <section className="bg-white py-12">
         <div className="mx-auto max-w-7xl px-4 lg:px-8">
-          <div className="flex items-center justify-center gap-6 md:gap-12 overflow-x-auto pb-2">
-            <a href="#pray" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap">Pray</a>
-            <a href="#goods" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap">Donate Goods</a>
-            <a href="#volunteer" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap">Volunteer</a>
-            <a href="#give" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap">Give</a>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-gray-900">Five Ways to Make a Difference</h2>
+            <p className="mt-2 text-gray-600">Choose how you'd like to help those in need</p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            <Link href="/prayer" className="group">
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition hover:border-primary-500 hover:shadow-lg h-full">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary-100 text-primary-600 transition group-hover:bg-primary-600 group-hover:text-white">
+                  <HeartHandshake className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900">Prayer</h3>
+                <p className="mt-2 text-sm text-gray-600">Submit or pray for requests</p>
+                <div className="mt-3 flex items-center justify-center gap-1 text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                  <span>View Requests</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/calendar?filter=clothing" className="group">
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition hover:border-accent-500 hover:shadow-lg h-full">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent-100 text-accent-600 transition group-hover:bg-accent-600 group-hover:text-white">
+                  <Shirt className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900">Clothing</h3>
+                <p className="mt-2 text-sm text-gray-600">Drop off gently used items</p>
+                <div className="mt-3 flex items-center justify-center gap-1 text-sm font-medium text-accent-600 group-hover:text-accent-700">
+                  <span>Find Events</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/calendar?filter=food" className="group">
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition hover:border-green-500 hover:shadow-lg h-full">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 transition group-hover:bg-green-600 group-hover:text-white">
+                  <Utensils className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900">Food</h3>
+                <p className="mt-2 text-sm text-gray-600">Donate meals & groceries</p>
+                <div className="mt-3 flex items-center justify-center gap-1 text-sm font-medium text-green-600 group-hover:text-green-700">
+                  <span>Find Events</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/calendar" className="group">
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition hover:border-blue-500 hover:shadow-lg h-full">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white">
+                  <Clock className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900">Volunteer</h3>
+                <p className="mt-2 text-sm text-gray-600">Give your time to serve</p>
+                <div className="mt-3 flex items-center justify-center gap-1 text-sm font-medium text-blue-600 group-hover:text-blue-700">
+                  <span>See Opportunities</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+
+            <Link href="/donate" className="group">
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition hover:border-amber-500 hover:shadow-lg h-full">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-600 transition group-hover:bg-amber-600 group-hover:text-white">
+                  <DollarSign className="h-7 w-7" />
+                </div>
+                <h3 className="mt-4 font-semibold text-gray-900">Donate</h3>
+                <p className="mt-2 text-sm text-gray-600">Support with a financial gift</p>
+                <div className="mt-3 flex items-center justify-center gap-1 text-sm font-medium text-amber-600 group-hover:text-amber-700">
+                  <span>Give Now</span>
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Navigation */}
+      <section className="bg-gray-100 py-4 border-y sticky top-0 z-10">
+        <div className="mx-auto max-w-7xl px-4 lg:px-8">
+          <div className="flex items-center justify-center gap-6 md:gap-12 overflow-x-auto">
+            <a href="#pray" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap transition">Pray</a>
+            <a href="#goods" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap transition">Donate Goods</a>
+            <a href="#volunteer" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap transition">Volunteer</a>
+            <a href="#give" className="text-sm font-medium text-gray-600 hover:text-primary-600 whitespace-nowrap transition">Give</a>
           </div>
         </div>
       </section>

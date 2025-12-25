@@ -213,3 +213,276 @@ export function generateStatementNumber(taxYear: number, prefix: string = 'STM')
 // Re-export templates for use in other contexts
 export { DonationReceiptEmail, getDonationReceiptEmailText } from './templates/donation-receipt';
 export { AnnualStatementEmail, getAnnualStatementEmailText } from './templates/annual-statement';
+export {
+  NewsletterEmail,
+  getNewsletterEmailText,
+  WelcomeEmail,
+  getWelcomeEmailText,
+  DonorUpdateEmail,
+  getDonorUpdateEmailText,
+  EventReminderEmail,
+  getEventReminderEmailText,
+} from './templates/newsletter';
+
+// ============================================
+// Newsletter & Subscriber Management
+// ============================================
+
+export interface Subscriber {
+  id: string;
+  email: string;
+  name?: string;
+  subscribedAt: Date;
+  status: 'active' | 'unsubscribed' | 'bounced';
+  lists: string[]; // e.g., ['newsletter', 'donor-updates', 'event-reminders']
+}
+
+export interface SendNewsletterParams {
+  to: string;
+  organization: {
+    name: string;
+    address: string;
+    phone: string;
+    email: string;
+    websiteUrl: string;
+  };
+  subscriber: {
+    name?: string;
+    email: string;
+  };
+  newsletter: {
+    subject: string;
+    preheader?: string;
+    sections: Array<{
+      type: 'heading' | 'text' | 'image' | 'button' | 'divider' | 'event' | 'donation-cta';
+      content: string;
+      imageUrl?: string;
+      buttonUrl?: string;
+      buttonText?: string;
+      eventDate?: string;
+      eventLocation?: string;
+    }>;
+  };
+  unsubscribeUrl: string;
+}
+
+export interface SendWelcomeEmailParams {
+  to: string;
+  organization: {
+    name: string;
+    address: string;
+    websiteUrl: string;
+  };
+  subscriber: {
+    name?: string;
+    email: string;
+  };
+  unsubscribeUrl: string;
+}
+
+export interface SendDonorUpdateParams {
+  to: string;
+  organization: {
+    name: string;
+    address: string;
+    websiteUrl: string;
+  };
+  donor: {
+    name: string;
+    email: string;
+  };
+  update: {
+    title: string;
+    message: string;
+    impactStats?: Array<{ label: string; value: string }>;
+    storyTitle?: string;
+    storyContent?: string;
+    ctaText?: string;
+    ctaUrl?: string;
+  };
+  unsubscribeUrl: string;
+}
+
+export interface SendEventReminderParams {
+  to: string;
+  organization: {
+    name: string;
+    websiteUrl: string;
+  };
+  recipient: {
+    name?: string;
+    email: string;
+  };
+  event: {
+    title: string;
+    date: string;
+    time: string;
+    location: string;
+    description?: string;
+    calendarUrl?: string;
+  };
+  unsubscribeUrl: string;
+}
+
+import {
+  NewsletterEmail,
+  getNewsletterEmailText,
+  WelcomeEmail,
+  getWelcomeEmailText,
+  DonorUpdateEmail,
+  getDonorUpdateEmailText,
+  EventReminderEmail,
+  getEventReminderEmailText,
+} from './templates/newsletter';
+
+/**
+ * Send a newsletter to a subscriber
+ */
+export async function sendNewsletter(
+  params: SendNewsletterParams
+): Promise<EmailResult> {
+  try {
+    const { to, organization, subscriber, newsletter, unsubscribeUrl } = params;
+
+    const emailProps = { organization, subscriber, newsletter, unsubscribeUrl };
+    const htmlContent = renderToStaticMarkup(
+      React.createElement(NewsletterEmail, emailProps)
+    );
+    const textContent = getNewsletterEmailText(emailProps);
+
+    const { data, error } = await resend.emails.send({
+      from: `${organization.name} <${DEFAULT_FROM_EMAIL}>`,
+      to: [to],
+      subject: newsletter.subject,
+      html: htmlContent,
+      text: textContent,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err) {
+    console.error('Newsletter send error:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send a welcome email to a new subscriber
+ */
+export async function sendWelcomeEmail(
+  params: SendWelcomeEmailParams
+): Promise<EmailResult> {
+  try {
+    const { to, organization, subscriber, unsubscribeUrl } = params;
+
+    const emailProps = { organization, subscriber, unsubscribeUrl };
+    const htmlContent = renderToStaticMarkup(
+      React.createElement(WelcomeEmail, emailProps)
+    );
+    const textContent = getWelcomeEmailText(emailProps);
+
+    const { data, error } = await resend.emails.send({
+      from: `${organization.name} <${DEFAULT_FROM_EMAIL}>`,
+      to: [to],
+      subject: `Welcome to ${organization.name}!`,
+      html: htmlContent,
+      text: textContent,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err) {
+    console.error('Welcome email send error:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send a donor update email
+ */
+export async function sendDonorUpdate(
+  params: SendDonorUpdateParams
+): Promise<EmailResult> {
+  try {
+    const { to, organization, donor, update, unsubscribeUrl } = params;
+
+    const emailProps = { organization, donor, update, unsubscribeUrl };
+    const htmlContent = renderToStaticMarkup(
+      React.createElement(DonorUpdateEmail, emailProps)
+    );
+    const textContent = getDonorUpdateEmailText(emailProps);
+
+    const { data, error } = await resend.emails.send({
+      from: `${organization.name} <${DEFAULT_FROM_EMAIL}>`,
+      to: [to],
+      subject: update.title,
+      html: htmlContent,
+      text: textContent,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err) {
+    console.error('Donor update send error:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send an event reminder email
+ */
+export async function sendEventReminderEmail(
+  params: SendEventReminderParams
+): Promise<EmailResult> {
+  try {
+    const { to, organization, recipient, event, unsubscribeUrl } = params;
+
+    const emailProps = { organization, recipient, event, unsubscribeUrl };
+    const htmlContent = renderToStaticMarkup(
+      React.createElement(EventReminderEmail, emailProps)
+    );
+    const textContent = getEventReminderEmailText(emailProps);
+
+    const { data, error } = await resend.emails.send({
+      from: `${organization.name} <${DEFAULT_FROM_EMAIL}>`,
+      to: [to],
+      subject: `Reminder: ${event.title}`,
+      html: htmlContent,
+      text: textContent,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, id: data?.id };
+  } catch (err) {
+    console.error('Event reminder send error:', err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : 'Unknown error',
+    };
+  }
+}

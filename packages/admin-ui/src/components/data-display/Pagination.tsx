@@ -68,7 +68,7 @@ export function Pagination({
         className
       )}
     >
-      <p className="text-sm text-gray-700">
+      <p className="text-sm text-gray-700 dark:text-gray-300">
         Showing <span className="font-medium">{startItem}</span> to{' '}
         <span className="font-medium">{endItem}</span> of{' '}
         <span className="font-medium">{totalItems}</span> results
@@ -79,8 +79,8 @@ export function Pagination({
           onClick={() => onPageChange(1)}
           disabled={!canGoPrevious}
           className={cn(
-            'rounded-lg p-2 text-gray-600',
-            canGoPrevious ? 'hover:bg-gray-100' : 'cursor-not-allowed opacity-50'
+            'rounded-lg p-2 text-gray-600 dark:text-gray-400',
+            canGoPrevious ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'cursor-not-allowed opacity-50'
           )}
           aria-label="Go to first page"
         >
@@ -90,8 +90,8 @@ export function Pagination({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={!canGoPrevious}
           className={cn(
-            'rounded-lg p-2 text-gray-600',
-            canGoPrevious ? 'hover:bg-gray-100' : 'cursor-not-allowed opacity-50'
+            'rounded-lg p-2 text-gray-600 dark:text-gray-400',
+            canGoPrevious ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'cursor-not-allowed opacity-50'
           )}
           aria-label="Go to previous page"
         >
@@ -101,7 +101,7 @@ export function Pagination({
         <div className="flex items-center gap-1 px-2">
           {getPageNumbers().map((page, index) =>
             page === 'ellipsis' ? (
-              <span key={`ellipsis-${index}`} className="px-2 text-gray-400">
+              <span key={`ellipsis-${index}`} className="px-2 text-gray-400 dark:text-gray-500">
                 ...
               </span>
             ) : (
@@ -112,7 +112,7 @@ export function Pagination({
                   'h-8 min-w-[2rem] rounded-lg px-3 text-sm font-medium',
                   currentPage === page
                     ? 'bg-primary-600 text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                 )}
               >
                 {page}
@@ -125,8 +125,8 @@ export function Pagination({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={!canGoNext}
           className={cn(
-            'rounded-lg p-2 text-gray-600',
-            canGoNext ? 'hover:bg-gray-100' : 'cursor-not-allowed opacity-50'
+            'rounded-lg p-2 text-gray-600 dark:text-gray-400',
+            canGoNext ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'cursor-not-allowed opacity-50'
           )}
           aria-label="Go to next page"
         >
@@ -136,8 +136,8 @@ export function Pagination({
           onClick={() => onPageChange(totalPages)}
           disabled={!canGoNext}
           className={cn(
-            'rounded-lg p-2 text-gray-600',
-            canGoNext ? 'hover:bg-gray-100' : 'cursor-not-allowed opacity-50'
+            'rounded-lg p-2 text-gray-600 dark:text-gray-400',
+            canGoNext ? 'hover:bg-gray-100 dark:hover:bg-gray-800' : 'cursor-not-allowed opacity-50'
           )}
           aria-label="Go to last page"
         >

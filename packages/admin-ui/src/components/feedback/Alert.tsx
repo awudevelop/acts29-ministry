@@ -4,15 +4,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
 const alertVariants = cva(
-  'relative rounded-lg border p-4',
+  'relative rounded-lg border p-4 transition-colors',
   {
     variants: {
       variant: {
-        default: 'bg-gray-50 border-gray-200 text-gray-800',
-        info: 'bg-blue-50 border-blue-200 text-blue-800',
-        success: 'bg-green-50 border-green-200 text-green-800',
-        warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
-        danger: 'bg-red-50 border-red-200 text-red-800',
+        default: 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200',
+        info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200',
+        success: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200',
+        warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200',
+        danger: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200',
       },
     },
     defaultVariants: {
@@ -57,7 +57,7 @@ export function Alert({
         {onClose && (
           <button
             onClick={onClose}
-            className="flex-shrink-0 rounded p-1 hover:bg-black/5"
+            className="flex-shrink-0 rounded p-1 hover:bg-black/5 dark:hover:bg-white/10"
           >
             <X className="h-4 w-4" />
           </button>

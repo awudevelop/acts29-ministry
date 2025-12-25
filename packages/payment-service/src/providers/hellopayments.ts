@@ -10,29 +10,91 @@ import type {
   Customer,
   PaymentProviderConfig,
   WebhookEvent,
+  PaymentMethodFees,
+  CreatePaymentLinkRequest,
+  PaymentLink,
 } from '../types';
 
 /**
  * HelloPayments provider implementation
  *
- * This is a placeholder implementation for HelloPayments integration.
- * Replace the mock implementations with actual API calls when the
- * HelloPayments API documentation becomes available.
+ * HelloPayments fee structure:
+ * - Card payments: 5% processing fee
+ * - ACH payments: 1% processing fee
+ *
+ * Donors can choose to cover the fee or have it deducted from the donation.
  */
 export class HelloPaymentsProvider extends BasePaymentProvider {
   readonly name = 'hellopayments';
   private apiBaseUrl = 'https://api.hellopayments.com/v1';
 
+  // HelloPayments fee structure
+  readonly fees: PaymentMethodFees = {
+    card: {
+      percentage: 5.0, // 5% for card payments
+      fixedCents: 0,
+    },
+    ach: {
+      percentage: 1.0, // 1% for ACH payments
+      fixedCents: 0,
+      maxFeeCents: 500, // $5 max fee for ACH
+    },
+  };
+
   async initialize(config: PaymentProviderConfig): Promise<void> {
     await super.initialize(config);
 
-    // Set HelloPayments-specific fee structure
-    this.feePercentage = 2.5; // Example rate
-    this.fixedFee = 25; // Example: $0.25 in cents
+    // Default fee for card payments (used by base provider)
+    this.feePercentage = this.fees.card.percentage;
+    this.fixedFee = this.fees.card.fixedCents;
 
     if (config.testMode) {
       this.apiBaseUrl = 'https://sandbox.api.hellopayments.com/v1';
     }
+  }
+
+  /**
+   * Calculate fee for a specific payment method
+   */
+  calculateFeeForMethod(
+    amount: number,
+    method: 'card' | 'ach'
+  ): { feeAmount: number; netAmount: number; totalWithCoverage: number } {
+    const feeConfig = this.fees[method];
+    let feeAmount = Math.ceil((amount * feeConfig.percentage) / 100) + feeConfig.fixedCents;
+
+    // Apply max fee cap for ACH
+    if (method === 'ach') {
+      const achConfig = this.fees.ach;
+      if (achConfig.maxFeeCents && feeAmount > achConfig.maxFeeCents) {
+        feeAmount = achConfig.maxFeeCents;
+      }
+    }
+
+    const netAmount = amount - feeAmount;
+
+    // Calculate total if donor covers fees
+    // totalWithCoverage - fee(totalWithCoverage) = amount
+    // For percentage only: totalWithCoverage = amount / (1 - percentage/100)
+    const rate = feeConfig.percentage / 100;
+    let totalWithCoverage = Math.ceil((amount + feeConfig.fixedCents) / (1 - rate));
+
+    // Apply max fee cap for ACH coverage calculation
+    if (method === 'ach') {
+      const achConfig = this.fees.ach;
+      if (achConfig.maxFeeCents) {
+        const coverageFee = Math.ceil((totalWithCoverage * feeConfig.percentage) / 100);
+        if (coverageFee > achConfig.maxFeeCents) {
+          totalWithCoverage = amount + achConfig.maxFeeCents;
+        }
+      }
+    }
+
+    return {
+      feeAmount,
+      netAmount,
+      totalWithCoverage,
+    };
   }
 
   // ============================================
@@ -325,8 +387,137 @@ export class HelloPaymentsProvider extends BasePaymentProvider {
   }
 
   // ============================================
+  // Payment Link Methods (QR Code / Shareable Links)
+  // ============================================
+
+  /**
+   * Create a payment link for donations via QR code or shareable URL
+   */
+  async createPaymentLink(request: CreatePaymentLinkRequest): Promise<PaymentLink> {
+    this.ensureInitialized();
+
+    const linkId = `hp_link_${Date.now().toString(36)}`;
+    const shortCode = this.generateShortCode();
+    const now = new Date();
+
+    // TODO: Replace with actual HelloPayments API call
+    // const response = await fetch(`${this.apiBaseUrl}/payment-links`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Authorization': `Bearer ${this.config!.apiKey}`,
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     amount: request.amount,
+    //     currency: request.currency,
+    //     description: request.description,
+    //     allowed_payment_methods: request.allowedPaymentMethods,
+    //     cover_fees_option: request.coverFeesOption,
+    //     expires_at: request.expiresAt?.toISOString(),
+    //     success_url: request.successUrl,
+    //     cancel_url: request.cancelUrl,
+    //     metadata: request.metadata,
+    //   }),
+    // });
+
+    const baseUrl = this.config?.testMode
+      ? 'https://sandbox.pay.hellopayments.com'
+      : 'https://pay.hellopayments.com';
+
+    return {
+      id: linkId,
+      url: `${baseUrl}/donate/${shortCode}`,
+      shortCode,
+      qrCodeUrl: `${baseUrl}/qr/${shortCode}.png`,
+      amount: request.amount,
+      currency: request.currency,
+      description: request.description,
+      organizationId: request.organizationId,
+      campaignId: request.campaignId,
+      allowedPaymentMethods: request.allowedPaymentMethods,
+      coverFeesOption: request.coverFeesOption,
+      status: 'active',
+      expiresAt: request.expiresAt,
+      metadata: request.metadata,
+      createdAt: now,
+      updatedAt: now,
+      totalCollected: 0,
+      donationCount: 0,
+    };
+  }
+
+  /**
+   * Get a payment link by ID
+   */
+  async getPaymentLink(linkId: string): Promise<PaymentLink | null> {
+    this.ensureInitialized();
+    // TODO: Replace with actual API call
+    return null;
+  }
+
+  /**
+   * List payment links for an organization
+   */
+  async listPaymentLinks(
+    organizationId: string,
+    options?: { status?: 'active' | 'expired' | 'disabled'; limit?: number }
+  ): Promise<PaymentLink[]> {
+    this.ensureInitialized();
+    // TODO: Replace with actual API call
+    return [];
+  }
+
+  /**
+   * Disable a payment link
+   */
+  async disablePaymentLink(linkId: string): Promise<PaymentLink> {
+    this.ensureInitialized();
+
+    const link = await this.getPaymentLink(linkId);
+    if (!link) {
+      throw new Error(`Payment link ${linkId} not found`);
+    }
+
+    // TODO: Replace with actual API call
+    return {
+      ...link,
+      status: 'disabled',
+      updatedAt: new Date(),
+    };
+  }
+
+  /**
+   * Generate QR code data URL for a payment link
+   * Returns a data URL that can be displayed in an <img> tag
+   */
+  async generateQRCode(linkId: string): Promise<string> {
+    this.ensureInitialized();
+
+    const link = await this.getPaymentLink(linkId);
+    if (!link) {
+      throw new Error(`Payment link ${linkId} not found`);
+    }
+
+    // TODO: Replace with actual QR code generation
+    // Could use a library like 'qrcode' or HelloPayments' API
+    return link.qrCodeUrl;
+  }
+
+  // ============================================
   // Helper Methods
   // ============================================
+
+  /**
+   * Generate a short, URL-safe code for payment links
+   */
+  private generateShortCode(): string {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  }
 
   private calculatePeriodEnd(
     start: Date,

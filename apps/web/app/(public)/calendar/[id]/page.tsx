@@ -13,6 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { mockEvents, type Event } from '@acts29/database';
+import { ShareButtons } from '@/components';
 
 export default function EventDetailPage() {
   const params = useParams();
@@ -432,23 +433,11 @@ function EventContent({ event }: { event: Event }) {
                 <p className="text-sm text-gray-600 mb-4">
                   Invite friends and family to join you at this event.
                 </p>
-                <button
-                  onClick={() => {
-                    if (navigator.share) {
-                      navigator.share({
-                        title: event.title,
-                        text: event.description,
-                        url: window.location.href,
-                      });
-                    } else {
-                      navigator.clipboard.writeText(window.location.href);
-                      alert('Link copied to clipboard!');
-                    }
-                  }}
-                  className="w-full rounded-lg border-2 border-gray-300 px-4 py-2 font-medium text-gray-700 transition hover:bg-gray-50"
-                >
-                  Share Event
-                </button>
+                <ShareButtons
+                  url={`/calendar/${event.id}`}
+                  title={event.title}
+                  description={event.description}
+                />
               </div>
 
               {/* Contact Card */}

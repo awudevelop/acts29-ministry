@@ -7,6 +7,7 @@ const config: Config = {
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/admin-ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

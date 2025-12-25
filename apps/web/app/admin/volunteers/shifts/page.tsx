@@ -13,6 +13,7 @@ import {
   ShiftStatusBadge,
   Select,
   ConfirmDialog,
+  LiveIndicator,
   formatDate,
 } from '@acts29/admin-ui';
 import { mockVolunteerShifts, mockResources, mockProfiles } from '@acts29/database';
@@ -37,7 +38,11 @@ export default function ShiftsPage() {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
   const [selectedShift, setSelectedShift] = React.useState<Shift | null>(null);
+  const [lastUpdate, setLastUpdate] = React.useState<Date>(new Date());
   const pageSize = 10;
+
+  // Simulate real-time connection status
+  const isLiveConnected = true;
 
   // Filter shifts
   const filteredShifts = React.useMemo(() => {
@@ -208,7 +213,14 @@ export default function ShiftsPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Volunteer Shifts</h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-gray-900">Volunteer Shifts</h1>
+            <LiveIndicator
+              isConnected={isLiveConnected}
+              lastUpdate={lastUpdate}
+              onRefresh={() => setLastUpdate(new Date())}
+            />
+          </div>
           <p className="mt-1 text-sm text-gray-600">
             Create and manage volunteer shift schedules
           </p>

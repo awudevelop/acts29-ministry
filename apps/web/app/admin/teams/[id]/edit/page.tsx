@@ -238,8 +238,8 @@ export default function EditTeamPage() {
                       value={formData.slug}
                       onChange={(e) => updateField('slug', e.target.value)}
                       placeholder="auto-generated-from-name"
-                      hint="URL-friendly identifier"
                     />
+                    <p className="mt-1 text-sm text-gray-500">URL-friendly identifier</p>
                   </div>
                   <div className="sm:col-span-2">
                     <Select
@@ -336,7 +336,7 @@ export default function EditTeamPage() {
                   style={{ backgroundColor: formData.color }}
                 >
                   <span className="text-lg font-bold">
-                    {formData.name ? formData.name[0].toUpperCase() : 'T'}
+                    {formData.name.length > 0 ? formData.name.charAt(0).toUpperCase() : 'T'}
                   </span>
                 </div>
                 <div>

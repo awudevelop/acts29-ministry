@@ -10,8 +10,9 @@ import {
   Input,
   Textarea,
   Alert,
+  Toggle,
 } from '@acts29/admin-ui';
-import { ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save, Shirt, Utensils } from 'lucide-react';
 import { mockEvents } from '@acts29/database';
 
 interface FormData {
@@ -24,6 +25,8 @@ interface FormData {
   endTime: string;
   maxAttendees: string;
   isPublic: boolean;
+  acceptsClothing: boolean;
+  acceptsFood: boolean;
 }
 
 export default function EditEventPage() {
@@ -48,6 +51,8 @@ export default function EditEventPage() {
         endTime: '',
         maxAttendees: '',
         isPublic: true,
+        acceptsClothing: false,
+        acceptsFood: false,
       };
     }
 
@@ -64,6 +69,8 @@ export default function EditEventPage() {
       endTime: endDateTime.toTimeString().slice(0, 5),
       maxAttendees: event.max_attendees?.toString() || '',
       isPublic: event.is_public,
+      acceptsClothing: event.accepts_clothing,
+      acceptsFood: event.accepts_food,
     };
   });
 
@@ -128,6 +135,8 @@ export default function EditEventPage() {
         end_time: endDateTime.toISOString(),
         max_attendees: formData.maxAttendees ? parseInt(formData.maxAttendees) : null,
         is_public: formData.isPublic,
+        accepts_clothing: formData.acceptsClothing,
+        accepts_food: formData.acceptsFood,
       });
 
       // Simulate API call
@@ -293,6 +302,48 @@ export default function EditEventPage() {
                   <p className="text-xs text-gray-500">
                     Public events are visible on the public calendar and allow open registration.
                   </p>
+                </div>
+              </FormSection>
+            </div>
+
+            {/* Donation Drop-off */}
+            <div className="rounded-xl border bg-white p-6">
+              <FormSection
+                title="Donation Drop-off"
+                description="Accept donations at this event"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-100 text-accent-600">
+                        <Shirt className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">Clothing</p>
+                        <p className="text-xs text-gray-500">Accept clothing donations</p>
+                      </div>
+                    </div>
+                    <Toggle
+                      checked={formData.acceptsClothing}
+                      onChange={(checked) => updateField('acceptsClothing', checked)}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-lg border p-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600">
+                        <Utensils className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">Food</p>
+                        <p className="text-xs text-gray-500">Accept food donations</p>
+                      </div>
+                    </div>
+                    <Toggle
+                      checked={formData.acceptsFood}
+                      onChange={(checked) => updateField('acceptsFood', checked)}
+                    />
+                  </div>
                 </div>
               </FormSection>
             </div>

@@ -125,3 +125,64 @@ export function calculateTotalWithFeeCoverage(
     totalAmount,
   };
 }
+
+/**
+ * HelloPayments-specific fee calculations
+ * Card: 5% | ACH: 1% (capped at $5)
+ */
+export const HELLOPAYMENTS_FEES = {
+  card: { percentage: 5.0, fixedCents: 0 },
+  ach: { percentage: 1.0, fixedCents: 0, maxFeeCents: 500 },
+} as const;
+
+/**
+ * Calculate fee for a specific payment method with HelloPayments rates
+ */
+export function calculateHelloPaymentsFee(
+  amountCents: number,
+  method: 'card' | 'ach'
+): {
+  feeAmount: number;
+  netAmount: number;
+  totalWithCoverage: number;
+  feePercentage: number;
+} {
+  const feeConfig = HELLOPAYMENTS_FEES[method];
+  let feeAmount = Math.ceil((amountCents * feeConfig.percentage) / 100) + feeConfig.fixedCents;
+
+  // Apply max fee cap for ACH
+  if (method === 'ach' && 'maxFeeCents' in feeConfig && feeAmount > feeConfig.maxFeeCents) {
+    feeAmount = feeConfig.maxFeeCents;
+  }
+
+  const netAmount = amountCents - feeAmount;
+
+  // Calculate total if donor covers fees
+  const rate = feeConfig.percentage / 100;
+  let totalWithCoverage = Math.ceil((amountCents + feeConfig.fixedCents) / (1 - rate));
+
+  // Apply max fee cap for ACH coverage calculation
+  if (method === 'ach' && 'maxFeeCents' in feeConfig) {
+    const coverageFee = Math.ceil((totalWithCoverage * feeConfig.percentage) / 100);
+    if (coverageFee > feeConfig.maxFeeCents) {
+      totalWithCoverage = amountCents + feeConfig.maxFeeCents;
+    }
+  }
+
+  return {
+    feeAmount,
+    netAmount,
+    totalWithCoverage,
+    feePercentage: feeConfig.percentage,
+  };
+}
+
+/**
+ * Get a human-readable fee description
+ */
+export function getFeeDescription(method: 'card' | 'ach'): string {
+  if (method === 'card') {
+    return '5% processing fee';
+  }
+  return '1% processing fee (max $5)';
+}

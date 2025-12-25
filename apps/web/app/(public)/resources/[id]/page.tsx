@@ -19,9 +19,9 @@ import {
   MoreHorizontal,
   ArrowLeft,
   ExternalLink,
-  Calendar,
 } from 'lucide-react';
 import { mockResources, type Resource, type ResourceType } from '@acts29/database';
+import { ShareButtons } from '@/components';
 
 const resourceTypeConfig: Record<
   ResourceType,
@@ -143,6 +143,13 @@ export default function ResourceDetailPage() {
                 {typeConfig.label}
               </span>
               <h1 className="text-3xl font-bold text-white">{resource.name}</h1>
+              <div className="mt-3">
+                <ShareButtons
+                  url={`/resources/${resource.id}`}
+                  title={resource.name}
+                  description={resource.description || undefined}
+                />
+              </div>
             </div>
           </div>
         </div>

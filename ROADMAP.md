@@ -224,6 +224,92 @@ This phase will connect the real Supabase backend and enable the real-time featu
   - [x] `darkMode: 'class'` enabled
   - [x] Consistent dark palette
 
+### Phase 13: Modular Features & Shelter Management
+Organizations have different needs - some run shelters, others focus on food distribution, some do case management. This phase introduces a modular feature system allowing organizations to enable only the features they need.
+
+#### Feature Toggle System
+- [ ] Organization feature flags in database
+  - [ ] `enabled_features` JSONB column on organizations table
+  - [ ] Feature definitions with metadata (icon, description, dependencies)
+- [ ] Feature settings UI
+  - [ ] Settings > Features page for org admins
+  - [ ] Toggle switches for each module
+  - [ ] Feature descriptions and use cases
+  - [ ] Dependency warnings (e.g., "Shelter requires Case Management")
+- [ ] Conditional navigation
+  - [ ] Sidebar shows only enabled features
+  - [ ] Dashboard stats scoped to enabled modules
+  - [ ] Automation triggers/actions filtered by enabled features
+- [ ] Feature context hook
+  - [ ] `useFeatures()` hook for checking enabled status
+  - [ ] `<FeatureGate>` component for conditional rendering
+
+#### Core Features (Always Enabled)
+- Donations & Tax Receipts
+- Volunteers & Shift Scheduling
+- Events/Calendar
+- Teams & Collaboration
+- Prayer Requests
+- Teaching Content
+
+#### Optional Modules
+
+##### Case Management (existing, now optional)
+- [ ] Make case management toggleable
+- [ ] Hide sidebar link when disabled
+- [ ] Filter dashboard stats
+- [ ] Client intake and needs tracking
+- [ ] Referral management
+- [ ] Case notes and progress
+
+##### Shelter Management (new)
+- [ ] Shelter database schema
+  - [ ] `shelters` table (capacity, type, location)
+  - [ ] `beds` table (bed number, status, shelter_id)
+  - [ ] `stays` table (guest, bed, check_in, check_out, notes)
+  - [ ] `shelter_guests` table (name, demographics, needs)
+- [ ] Shelter admin pages
+  - [ ] Shelter list and configuration
+  - [ ] Bed management grid view
+  - [ ] Check-in/check-out flow
+  - [ ] Current occupancy dashboard
+  - [ ] Stay history and reports
+- [ ] Real-time bed availability
+  - [ ] Live occupancy indicators
+  - [ ] Bed status updates (available, occupied, reserved, maintenance)
+- [ ] Guest management
+  - [ ] Guest profiles (linked to cases if enabled)
+  - [ ] Stay history per guest
+  - [ ] Banned guest tracking
+- [ ] Shelter automations
+  - [ ] Check-in confirmation SMS
+  - [ ] Capacity alerts
+  - [ ] Nightly report emails
+
+##### Resource Directory (existing, now optional)
+- [ ] Make resource directory toggleable
+- [ ] Community resource listings
+- [ ] Category filtering
+- [ ] Public resource page visibility
+
+##### Food Pantry Module (future)
+- [ ] Inventory tracking
+- [ ] Distribution records
+- [ ] Client visits and limits
+- [ ] Donation intake
+
+##### Medical Outreach Module (future)
+- [ ] Health screening records
+- [ ] Medication tracking
+- [ ] Referral to providers
+- [ ] HIPAA-compliant notes
+
+##### Transportation Module (future)
+- [ ] Ride requests
+- [ ] Vehicle/driver management
+- [ ] Route scheduling
+- [ ] Mileage tracking
+
 ## Technical Debt & Improvements
 
 ### High Priority

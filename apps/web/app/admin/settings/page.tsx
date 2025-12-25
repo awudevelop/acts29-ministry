@@ -12,6 +12,7 @@ import {
   Shield,
   Database,
   ChevronRight,
+  Puzzle,
 } from 'lucide-react';
 import { mockOrganizations } from '@acts29/database';
 
@@ -21,6 +22,12 @@ const settingsSections = [
     description: 'Manage your organization profile, logo, and contact information',
     icon: Building2,
     href: '/admin/settings/organization',
+  },
+  {
+    title: 'Feature Modules',
+    description: 'Enable or disable optional features like shelter management and case tracking',
+    icon: Puzzle,
+    href: '/admin/settings/features',
   },
   {
     title: 'Payment Integration',
@@ -71,8 +78,8 @@ export default function SettingsPage() {
       <Breadcrumbs items={[{ label: 'Settings' }]} />
 
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
           Manage your organization settings and preferences
         </p>
       </div>
@@ -84,15 +91,15 @@ export default function SettingsPage() {
       )}
 
       {/* Quick Organization Info */}
-      <div className="rounded-xl border bg-white p-6">
+      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary-100 text-2xl font-bold text-primary-600">
+          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900/30 text-2xl font-bold text-primary-600 dark:text-primary-400">
             {organization.name[0]}
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-semibold text-gray-900">{organization.name}</h2>
-            <p className="text-gray-600">{organization.address}</p>
-            <p className="text-sm text-gray-500">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{organization.name}</h2>
+            <p className="text-gray-600 dark:text-gray-400">{organization.address}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-500">
               {organization.phone} • {organization.email}
             </p>
           </div>
@@ -111,56 +118,56 @@ export default function SettingsPage() {
           <Link
             key={section.href}
             href={section.href}
-            className="group rounded-xl border bg-white p-6 hover:border-primary-300 hover:shadow-md transition-all"
+            className="group rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 hover:border-primary-300 dark:hover:border-primary-700 hover:shadow-md transition-all"
           >
             <div className="flex items-start gap-4">
-              <div className="rounded-lg bg-gray-100 p-3 group-hover:bg-primary-100 transition-colors">
-                <section.icon className="h-6 w-6 text-gray-600 group-hover:text-primary-600 transition-colors" />
+              <div className="rounded-lg bg-gray-100 dark:bg-gray-700 p-3 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors">
+                <section.icon className="h-6 w-6 text-gray-600 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                   {section.title}
                 </h3>
-                <p className="mt-1 text-sm text-gray-600">{section.description}</p>
+                <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{section.description}</p>
               </div>
-              <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-primary-600 transition-colors" />
+              <ChevronRight className="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
             </div>
           </Link>
         ))}
       </div>
 
       {/* Tax Information */}
-      <div className="rounded-xl border bg-white p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Tax Information</h3>
+      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Tax Information</h3>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               EIN (Tax ID Number)
             </label>
             <input
               type="text"
               defaultValue="47-1234567"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               501(c)(3) Status
             </label>
-            <select className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500">
+            <select className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500">
               <option>Yes - Tax Exempt</option>
               <option>Pending</option>
               <option>No</option>
             </select>
           </div>
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Tax Deductibility Statement (for receipts)
             </label>
             <textarea
               rows={3}
               defaultValue="Helping Hands of Springfield is a tax-exempt organization under Section 501(c)(3) of the Internal Revenue Code. No goods or services were provided in exchange for this contribution, making it fully tax-deductible to the extent allowed by law."
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
             />
           </div>
         </div>
@@ -172,13 +179,13 @@ export default function SettingsPage() {
       </div>
 
       {/* Danger Zone */}
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-        <h3 className="font-semibold text-red-900 mb-2">Danger Zone</h3>
-        <p className="text-sm text-red-700 mb-4">
+      <div className="rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 p-6">
+        <h3 className="font-semibold text-red-900 dark:text-red-400 mb-2">Danger Zone</h3>
+        <p className="text-sm text-red-700 dark:text-red-300 mb-4">
           These actions are destructive and cannot be undone. Please proceed with caution.
         </p>
         <div className="flex gap-3">
-          <Button variant="outline" className="border-red-300 text-red-600 hover:bg-red-100">
+          <Button variant="outline" className="border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30">
             Export All Data
           </Button>
           <Button variant="destructive">

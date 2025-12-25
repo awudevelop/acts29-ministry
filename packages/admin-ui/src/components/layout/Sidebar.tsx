@@ -19,9 +19,20 @@ import {
   MapPin,
   UsersRound,
   HeartHandshake,
+  Home,
+  Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+
+// Feature module IDs that can be toggled
+type FeatureModuleId =
+  | 'case_management'
+  | 'shelter_management'
+  | 'resource_directory'
+  | 'food_pantry'
+  | 'medical_outreach'
+  | 'transportation';
 
 interface NavItem {
   name: string;
@@ -29,6 +40,7 @@ interface NavItem {
   icon: LucideIcon;
   roles?: string[];
   children?: { name: string; href: string }[];
+  featureId?: FeatureModuleId; // Optional feature flag
 }
 
 const navigation: NavItem[] = [
@@ -84,6 +96,7 @@ const navigation: NavItem[] = [
     href: '/admin/resources',
     icon: MapPin,
     roles: ['super_admin', 'org_admin', 'staff'],
+    featureId: 'resource_directory',
   },
   {
     name: 'Teams',
@@ -96,6 +109,20 @@ const navigation: NavItem[] = [
     href: '/admin/cases',
     icon: Briefcase,
     roles: ['super_admin', 'org_admin', 'staff'],
+    featureId: 'case_management',
+  },
+  {
+    name: 'Shelter',
+    href: '/admin/shelter',
+    icon: Home,
+    roles: ['super_admin', 'org_admin', 'staff'],
+    featureId: 'shelter_management',
+  },
+  {
+    name: 'Automations',
+    href: '/admin/automations',
+    icon: Zap,
+    roles: ['super_admin', 'org_admin'],
   },
   {
     name: 'Users',
@@ -116,15 +143,30 @@ interface SidebarProps {
   collapsed?: boolean;
   onCollapse?: (collapsed: boolean) => void;
   onSignOut?: () => void;
+  enabledFeatures?: FeatureModuleId[];
 }
 
-export function Sidebar({ userRole = 'org_admin', collapsed = false, onCollapse, onSignOut }: SidebarProps) {
+export function Sidebar({
+  userRole = 'org_admin',
+  collapsed = false,
+  onCollapse,
+  onSignOut,
+  enabledFeatures = ['case_management', 'resource_directory'], // Default enabled features
+}: SidebarProps) {
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = React.useState<string[]>([]);
 
-  const filteredNavigation = navigation.filter(
-    (item) => !item.roles || item.roles.includes(userRole)
-  );
+  const filteredNavigation = navigation.filter((item) => {
+    // Check role access
+    if (item.roles && !item.roles.includes(userRole)) {
+      return false;
+    }
+    // Check feature flag - if item has featureId, it must be enabled
+    if (item.featureId && !enabledFeatures.includes(item.featureId)) {
+      return false;
+    }
+    return true;
+  });
 
   const toggleExpanded = (name: string) => {
     setExpandedItems((prev) =>

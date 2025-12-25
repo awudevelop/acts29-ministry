@@ -5,6 +5,15 @@ import { Sidebar } from './Sidebar';
 import { TopBar } from './TopBar';
 import { cn } from '../../lib/utils';
 
+// Feature module IDs that can be toggled
+type FeatureModuleId =
+  | 'case_management'
+  | 'shelter_management'
+  | 'resource_directory'
+  | 'food_pantry'
+  | 'medical_outreach'
+  | 'transportation';
+
 interface AdminLayoutProps {
   children: React.ReactNode;
   user?: {
@@ -18,9 +27,18 @@ interface AdminLayoutProps {
   onSignOut?: () => void;
   notificationSlot?: React.ReactNode;
   themeToggleSlot?: React.ReactNode;
+  enabledFeatures?: FeatureModuleId[];
 }
 
-export function AdminLayout({ children, user, organizationName, onSignOut, notificationSlot, themeToggleSlot }: AdminLayoutProps) {
+export function AdminLayout({
+  children,
+  user,
+  organizationName,
+  onSignOut,
+  notificationSlot,
+  themeToggleSlot,
+  enabledFeatures,
+}: AdminLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
 
@@ -41,6 +59,7 @@ export function AdminLayout({ children, user, organizationName, onSignOut, notif
           collapsed={sidebarCollapsed}
           onCollapse={setSidebarCollapsed}
           onSignOut={onSignOut}
+          enabledFeatures={enabledFeatures}
         />
       </div>
 
@@ -54,6 +73,7 @@ export function AdminLayout({ children, user, organizationName, onSignOut, notif
         <Sidebar
           userRole={user?.role}
           onSignOut={onSignOut}
+          enabledFeatures={enabledFeatures}
         />
       </div>
 

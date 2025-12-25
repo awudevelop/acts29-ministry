@@ -103,6 +103,60 @@
 - Organization membership
 - Access control
 
+## Modular Feature System
+
+The platform supports optional modules that organizations can enable based on their specific needs. Not all ministries require all features - a food pantry may not need shelter management, while a shelter may not need case management.
+
+### Core Features (Always Enabled)
+- Donations & Tax Receipts
+- Volunteers & Shift Scheduling
+- Events/Calendar
+- Teams & Collaboration
+- Prayer Requests
+- Teaching Content
+
+### Optional Modules
+
+#### Case Management
+- Client intake and needs assessment
+- Case worker assignment
+- Progress notes and referrals
+- Outcome tracking
+
+#### Shelter Management
+- Bed/room inventory and status
+- Guest check-in/check-out
+- Occupancy tracking and reports
+- Stay history per guest
+- Capacity alerts and notifications
+
+#### Resource Directory
+- Community resource listings
+- Category filtering (shelter, food, medical, etc.)
+- Public visibility controls
+
+#### Food Pantry (planned)
+- Inventory management
+- Distribution tracking
+- Client visit limits
+
+#### Medical Outreach (planned)
+- Health screening records
+- Medication tracking
+- Provider referrals
+
+#### Transportation (planned)
+- Ride scheduling
+- Vehicle/driver management
+- Route optimization
+
+### Feature Configuration
+- Settings > Features page for org admins
+- Toggle switches with descriptions
+- Dependency warnings between modules
+- `useFeatures()` hook for conditional rendering
+- `<FeatureGate>` component for access control
+
 ## Theme System
 
 ### Dark Mode Support

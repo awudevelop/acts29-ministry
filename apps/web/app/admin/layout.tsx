@@ -6,6 +6,7 @@ import { AdminLayout, NotificationCenter, useNotifications } from '@acts29/admin
 import { ErrorBoundary } from '../../components';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useAuth } from '@/lib/auth';
+import { useFeatures } from '@/lib/features';
 import { mockActivities } from '@acts29/database';
 
 // Loading skeleton for admin layout
@@ -35,6 +36,7 @@ export default function AdminDashboardLayout({
 }) {
   const router = useRouter();
   const { user, isLoading, logout, isAuthenticated } = useAuth();
+  const { enabledFeatures } = useFeatures();
 
   // Redirect to login if not authenticated
   React.useEffect(() => {
@@ -103,6 +105,7 @@ export default function AdminDashboardLayout({
         />
       }
       themeToggleSlot={<ThemeToggle variant="icon" />}
+      enabledFeatures={enabledFeatures}
     >
       <ErrorBoundary>{children}</ErrorBoundary>
     </AdminLayout>

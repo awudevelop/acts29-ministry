@@ -341,3 +341,83 @@ export interface Activity {
   timestamp: string;
   read?: boolean;
 }
+
+// Feature module types for modular feature system
+export type FeatureModuleId =
+  | 'case_management'
+  | 'shelter_management'
+  | 'resource_directory'
+  | 'food_pantry'
+  | 'medical_outreach'
+  | 'transportation';
+
+export interface FeatureModule {
+  id: FeatureModuleId;
+  name: string;
+  description: string;
+  icon: string; // Lucide icon name
+  category: 'outreach' | 'operations' | 'services';
+  dependencies?: FeatureModuleId[];
+  isCore?: boolean; // Core features can't be disabled
+  isPlanned?: boolean; // Planned for future release
+}
+
+export interface OrganizationFeatures {
+  enabledModules: FeatureModuleId[];
+  moduleSettings?: Record<FeatureModuleId, Record<string, unknown>>;
+}
+
+// Feature module definitions
+export const featureModules: FeatureModule[] = [
+  {
+    id: 'case_management',
+    name: 'Case Management',
+    description: 'Track client intake, needs assessments, case notes, and referrals. Ideal for social services and outreach ministries.',
+    icon: 'ClipboardList',
+    category: 'services',
+  },
+  {
+    id: 'shelter_management',
+    name: 'Shelter Management',
+    description: 'Manage beds, guest check-in/out, occupancy tracking, and stay history. For overnight shelters and housing programs.',
+    icon: 'Home',
+    category: 'operations',
+  },
+  {
+    id: 'resource_directory',
+    name: 'Resource Directory',
+    description: 'Maintain a directory of community resources (shelters, food banks, clinics) for public access.',
+    icon: 'MapPin',
+    category: 'services',
+  },
+  {
+    id: 'food_pantry',
+    name: 'Food Pantry',
+    description: 'Track food inventory, distribution records, and client visit limits.',
+    icon: 'Apple',
+    category: 'operations',
+    isPlanned: true,
+  },
+  {
+    id: 'medical_outreach',
+    name: 'Medical Outreach',
+    description: 'Health screening records, medication tracking, and provider referrals with HIPAA-compliant notes.',
+    icon: 'Stethoscope',
+    category: 'services',
+    isPlanned: true,
+  },
+  {
+    id: 'transportation',
+    name: 'Transportation',
+    description: 'Coordinate ride requests, vehicle scheduling, and driver assignments.',
+    icon: 'Car',
+    category: 'operations',
+    isPlanned: true,
+  },
+];
+
+// Default enabled features for new organizations
+export const defaultEnabledFeatures: FeatureModuleId[] = [
+  'case_management',
+  'resource_directory',
+];

@@ -56,4 +56,10 @@ export type {
   TeamMember,
   ActivityType,
   Activity,
+  FeatureModuleId,
+  FeatureModule,
+  OrganizationFeatures,
 } from './types';
+
+// Feature module exports
+export { featureModules, defaultEnabledFeatures } from './types';

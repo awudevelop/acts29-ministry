@@ -463,3 +463,446 @@ export interface ConnectedCalendar {
   last_synced_at?: string | null;
   connected_at: string;
 }
+
+// ===========================================
+// Notification Preferences Types
+// ===========================================
+
+export type NotificationChannel = 'email' | 'sms' | 'push' | 'in_app';
+
+export type NotificationCategory =
+  | 'donations'
+  | 'volunteers'
+  | 'events'
+  | 'cases'
+  | 'prayer'
+  | 'teams'
+  | 'system';
+
+export type NotificationType =
+  // Donations
+  | 'donation_received'
+  | 'donation_large'
+  | 'donation_recurring_failed'
+  | 'donation_recurring_success'
+  | 'donation_refunded'
+  | 'tax_receipt_ready'
+  // Volunteers
+  | 'shift_reminder'
+  | 'shift_assigned'
+  | 'shift_cancelled'
+  | 'shift_updated'
+  | 'volunteer_registered'
+  | 'volunteer_hours_summary'
+  // Events
+  | 'event_reminder'
+  | 'event_registration'
+  | 'event_cancelled'
+  | 'event_updated'
+  // Cases
+  | 'case_assigned'
+  | 'case_updated'
+  | 'case_note_added'
+  | 'case_closed'
+  // Prayer
+  | 'prayer_request_new'
+  | 'prayer_request_answered'
+  | 'prayer_update'
+  // Teams
+  | 'team_member_added'
+  | 'team_member_removed'
+  | 'team_announcement'
+  // System
+  | 'weekly_summary'
+  | 'monthly_report'
+  | 'system_announcement'
+  | 'security_alert';
+
+export interface NotificationTypeConfig {
+  type: NotificationType;
+  category: NotificationCategory;
+  name: string;
+  description: string;
+  defaultChannels: NotificationChannel[];
+  availableChannels: NotificationChannel[];
+  // Some notification types are admin-only
+  adminOnly?: boolean;
+  // Some are for external users (donors, volunteers)
+  externalUser?: boolean;
+}
+
+export interface NotificationPreference {
+  id: string;
+  user_id: string;
+  notification_type: NotificationType;
+  email_enabled: boolean;
+  sms_enabled: boolean;
+  push_enabled: boolean;
+  in_app_enabled: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NotificationSettings {
+  id: string;
+  user_id: string;
+  // Global toggles
+  email_enabled: boolean;
+  sms_enabled: boolean;
+  push_enabled: boolean;
+  // Quiet hours (don't send SMS/push during these times)
+  quiet_hours_enabled: boolean;
+  quiet_hours_start: string; // e.g., "22:00"
+  quiet_hours_end: string; // e.g., "07:00"
+  quiet_hours_timezone: string; // e.g., "America/Chicago"
+  // Digest preferences
+  digest_frequency: 'immediate' | 'daily' | 'weekly' | 'none';
+  digest_time: string; // e.g., "09:00" for daily/weekly digests
+  digest_day?: number; // 0-6 for weekly (0 = Sunday)
+  // SMS opt-in status (for TCPA compliance)
+  sms_opted_in: boolean;
+  sms_opted_in_at?: string | null;
+  sms_phone_number?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+// Notification queue for processing
+export type NotificationStatus = 'pending' | 'processing' | 'sent' | 'failed' | 'cancelled';
+
+export interface QueuedNotification {
+  id: string;
+  user_id: string;
+  notification_type: NotificationType;
+  channel: NotificationChannel;
+  // Content
+  title: string;
+  body: string;
+  data?: Record<string, unknown>;
+  // Scheduling
+  scheduled_for: string;
+  sent_at?: string | null;
+  // Status tracking
+  status: NotificationStatus;
+  error_message?: string | null;
+  retry_count: number;
+  max_retries: number;
+  // Metadata
+  related_entity_type?: string;
+  related_entity_id?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+// Notification log for analytics
+export interface NotificationLog {
+  id: string;
+  user_id: string;
+  notification_type: NotificationType;
+  channel: NotificationChannel;
+  title: string;
+  // Delivery status
+  sent_at: string;
+  delivered_at?: string | null;
+  opened_at?: string | null;
+  clicked_at?: string | null;
+  // Failure tracking
+  delivery_status: 'sent' | 'delivered' | 'bounced' | 'failed' | 'unsubscribed';
+  error_message?: string | null;
+  // Provider info
+  provider_message_id?: string | null;
+  created_at: string;
+}
+
+// All notification type configurations
+export const notificationTypeConfigs: NotificationTypeConfig[] = [
+  // Donations
+  {
+    type: 'donation_received',
+    category: 'donations',
+    name: 'New Donation',
+    description: 'When a new donation is received',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'donation_large',
+    category: 'donations',
+    name: 'Large Donation Alert',
+    description: 'When a donation exceeds the configured threshold',
+    defaultChannels: ['email', 'push', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'donation_recurring_failed',
+    category: 'donations',
+    name: 'Recurring Donation Failed',
+    description: 'When a recurring donation payment fails',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'sms', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'donation_recurring_success',
+    category: 'donations',
+    name: 'Recurring Donation Processed',
+    description: 'Confirmation when recurring donation is processed',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'donation_refunded',
+    category: 'donations',
+    name: 'Donation Refunded',
+    description: 'When a donation is refunded',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'tax_receipt_ready',
+    category: 'donations',
+    name: 'Tax Receipt Ready',
+    description: 'When a tax receipt is available',
+    defaultChannels: ['email'],
+    availableChannels: ['email'],
+    externalUser: true,
+  },
+  // Volunteers
+  {
+    type: 'shift_reminder',
+    category: 'volunteers',
+    name: 'Shift Reminder',
+    description: 'Reminder before your scheduled shift',
+    defaultChannels: ['email', 'sms', 'push'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'shift_assigned',
+    category: 'volunteers',
+    name: 'Shift Assigned',
+    description: 'When you are assigned to a shift',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'shift_cancelled',
+    category: 'volunteers',
+    name: 'Shift Cancelled',
+    description: 'When a shift you were assigned to is cancelled',
+    defaultChannels: ['email', 'sms', 'push'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'shift_updated',
+    category: 'volunteers',
+    name: 'Shift Updated',
+    description: 'When a shift you were assigned to is modified',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'volunteer_registered',
+    category: 'volunteers',
+    name: 'New Volunteer',
+    description: 'When someone signs up to volunteer',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'volunteer_hours_summary',
+    category: 'volunteers',
+    name: 'Hours Summary',
+    description: 'Weekly summary of volunteer hours',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'in_app'],
+    externalUser: true,
+  },
+  // Events
+  {
+    type: 'event_reminder',
+    category: 'events',
+    name: 'Event Reminder',
+    description: 'Reminder before an event you registered for',
+    defaultChannels: ['email', 'push'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'event_registration',
+    category: 'events',
+    name: 'Event Registration',
+    description: 'When someone registers for an event',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'event_cancelled',
+    category: 'events',
+    name: 'Event Cancelled',
+    description: 'When an event you registered for is cancelled',
+    defaultChannels: ['email', 'sms'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'event_updated',
+    category: 'events',
+    name: 'Event Updated',
+    description: 'When an event you registered for is updated',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    externalUser: true,
+  },
+  // Cases
+  {
+    type: 'case_assigned',
+    category: 'cases',
+    name: 'Case Assigned',
+    description: 'When a case is assigned to you',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'case_updated',
+    category: 'cases',
+    name: 'Case Updated',
+    description: 'When a case you are assigned to is updated',
+    defaultChannels: ['in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'case_note_added',
+    category: 'cases',
+    name: 'Case Note Added',
+    description: 'When a note is added to a case you are assigned to',
+    defaultChannels: ['in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'case_closed',
+    category: 'cases',
+    name: 'Case Closed',
+    description: 'When a case is closed',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  // Prayer
+  {
+    type: 'prayer_request_new',
+    category: 'prayer',
+    name: 'New Prayer Request',
+    description: 'When a new prayer request is submitted',
+    defaultChannels: ['in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'prayer_request_answered',
+    category: 'prayer',
+    name: 'Prayer Request Answered',
+    description: 'When a prayer request is marked as answered',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'push', 'in_app'],
+    externalUser: true,
+  },
+  {
+    type: 'prayer_update',
+    category: 'prayer',
+    name: 'Prayer Update',
+    description: 'Updates on prayer requests you are following',
+    defaultChannels: ['email'],
+    availableChannels: ['email', 'push', 'in_app'],
+    externalUser: true,
+  },
+  // Teams
+  {
+    type: 'team_member_added',
+    category: 'teams',
+    name: 'Team Member Added',
+    description: 'When someone joins a team you lead',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'team_member_removed',
+    category: 'teams',
+    name: 'Team Member Removed',
+    description: 'When someone leaves a team you lead',
+    defaultChannels: ['in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+    adminOnly: true,
+  },
+  {
+    type: 'team_announcement',
+    category: 'teams',
+    name: 'Team Announcement',
+    description: 'Announcements from teams you are a member of',
+    defaultChannels: ['email', 'push', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+  },
+  // System
+  {
+    type: 'weekly_summary',
+    category: 'system',
+    name: 'Weekly Summary',
+    description: 'Weekly overview of ministry activity',
+    defaultChannels: ['email'],
+    availableChannels: ['email'],
+    adminOnly: true,
+  },
+  {
+    type: 'monthly_report',
+    category: 'system',
+    name: 'Monthly Report',
+    description: 'Monthly statistics and insights',
+    defaultChannels: ['email'],
+    availableChannels: ['email'],
+    adminOnly: true,
+  },
+  {
+    type: 'system_announcement',
+    category: 'system',
+    name: 'System Announcements',
+    description: 'Important updates about the platform',
+    defaultChannels: ['email', 'in_app'],
+    availableChannels: ['email', 'push', 'in_app'],
+  },
+  {
+    type: 'security_alert',
+    category: 'system',
+    name: 'Security Alerts',
+    description: 'Important security notifications',
+    defaultChannels: ['email', 'sms', 'push', 'in_app'],
+    availableChannels: ['email', 'sms', 'push', 'in_app'],
+  },
+];
+
+// Helper to get notification configs by category
+export function getNotificationsByCategory(category: NotificationCategory): NotificationTypeConfig[] {
+  return notificationTypeConfigs.filter((c) => c.category === category);
+}
+
+// Helper to get admin-only notifications
+export function getAdminNotifications(): NotificationTypeConfig[] {
+  return notificationTypeConfigs.filter((c) => c.adminOnly);
+}
+
+// Helper to get external user notifications
+export function getExternalUserNotifications(): NotificationTypeConfig[] {
+  return notificationTypeConfigs.filter((c) => c.externalUser);
+}

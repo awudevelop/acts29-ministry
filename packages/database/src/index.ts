@@ -16,6 +16,8 @@ export {
   mockTeams,
   mockTeamMembers,
   mockActivities,
+  mockNotificationSettings,
+  mockNotificationPreferences,
 } from './mock';
 
 // Real client exports - note: requires NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY env vars
@@ -64,7 +66,25 @@ export type {
   CalendarFeedToken,
   CalendarFeedSettings,
   ConnectedCalendar,
+  // Notification types
+  NotificationChannel,
+  NotificationCategory,
+  NotificationType,
+  NotificationTypeConfig,
+  NotificationPreference,
+  NotificationSettings,
+  NotificationStatus,
+  QueuedNotification,
+  NotificationLog,
 } from './types';
 
 // Feature module exports
 export { featureModules, defaultEnabledFeatures } from './types';
+
+// Notification configuration exports
+export {
+  notificationTypeConfigs,
+  getNotificationsByCategory,
+  getAdminNotifications,
+  getExternalUserNotifications,
+} from './types';

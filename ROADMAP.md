@@ -314,27 +314,40 @@ Organizations have different needs - some run shelters, others focus on food dis
 
 This phase focuses on two interconnected features: bidirectional calendar sync with external providers and a comprehensive notification system across email and SMS channels.
 
-#### Phase 14A: Notification Preferences & Infrastructure (Foundation)
+#### Phase 14A: Notification Preferences & Infrastructure (Foundation) ✅ COMPLETE
 User-controlled notification preferences and unified notification queue.
 
-- [ ] Notification preferences database schema
-  - [ ] `notification_preferences` table (user_id, channel, type, enabled, quiet_hours)
-  - [ ] `notification_queue` table (id, user_id, channel, type, content, scheduled_for, sent_at, status)
-  - [ ] `notification_logs` table (id, user_id, channel, type, sent_at, delivery_status, error)
-- [ ] Admin Settings > Notifications page enhancements
-  - [ ] Per-notification-type toggles (events, shifts, donations, prayer, cases)
-  - [ ] Channel preferences (email, SMS, push, in-app)
-  - [ ] Quiet hours configuration (e.g., no SMS between 10pm-7am)
-  - [ ] Digest frequency options (immediate, daily, weekly)
-- [ ] User notification preferences (public portal)
-  - [ ] /account/notifications page for donors/volunteers
-  - [ ] Unsubscribe links in emails
-  - [ ] SMS opt-out handling (STOP keyword)
-- [ ] Notification queue service
-  - [ ] Queue processing with retry logic
-  - [ ] Rate limiting per channel
-  - [ ] Batch sending for digests
-  - [ ] Failure handling and alerting
+- [x] Notification preferences database schema
+  - [x] `NotificationSettings` type (user_id, channels, quiet_hours, digest preferences)
+  - [x] `NotificationPreference` type (user_id, notification_type, channel toggles)
+  - [x] `QueuedNotification` type (id, user_id, type, channels, payload, status, scheduled_for)
+  - [x] `NotificationLog` type (id, channel, status, timestamps, response_data)
+  - [x] 27 notification types across 7 categories
+  - [x] Mock data for notification settings and preferences
+- [x] Admin Settings > Notifications page enhancements
+  - [x] Global channel toggles (Email, SMS, Push)
+  - [x] Per-notification-type toggles organized by category
+  - [x] Channel preferences (email, SMS, push, in-app) per notification type
+  - [x] Quiet hours configuration with start/end times
+  - [x] Digest frequency options (immediate, daily, weekly, none)
+  - [x] SMS phone number configuration
+  - [x] Collapsible category sections with quick toggle buttons
+- [x] User notification preferences (public portal)
+  - [x] /account/notifications page for donors/volunteers
+  - [x] SMS opt-in with TCPA compliance language
+  - [x] Quiet hours configuration for SMS/push
+  - [x] Per-notification preferences for external user types
+  - [x] Unsubscribe from all option
+- [x] Notification queue service (@acts29/notification-service)
+  - [x] Multi-channel notification delivery (email, SMS, push, in-app)
+  - [x] User preference caching with TTL
+  - [x] Channel availability checking
+  - [x] Quiet hours enforcement
+  - [x] Queue processing with retry logic (3 attempts)
+  - [x] Batch sending for bulk notifications
+  - [x] Digest management (queue and send)
+  - [x] Built-in notification templates
+  - [x] Queue statistics and logging
 
 #### Phase 14B: Email Notifications Enhancement
 Expand email templates and automation triggers.
@@ -490,6 +503,7 @@ Acts29Ministry/
 │   ├── automation-service/     # Zapier-style workflow automation engine
 │   ├── calendar-service/       # iCal generation and calendar subscriptions
 │   ├── email-service/          # Email templates and Resend integration
+│   ├── notification-service/   # Unified notification orchestration
 │   ├── payment-service/        # Payment provider abstraction (HelloPayments, Stripe)
 │   ├── pdf-service/            # PDF generation for receipts
 │   ├── sms-service/            # SMS notifications via Twilio

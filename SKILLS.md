@@ -180,6 +180,23 @@ The platform supports optional modules that organizations can enable based on th
 - Primary colors use `/30` opacity variants
 - All components include dark: variants
 
+## Notification Preferences
+
+### Admin Notification Settings
+- Global channel toggles (Email, SMS, Push)
+- Quiet hours configuration with start/end times
+- Email digest frequency (immediate, daily, weekly)
+- Per-notification-type channel preferences
+- Collapsible category organization (donations, volunteers, events, cases, prayer, teams, system)
+- Quick toggle buttons per category
+
+### Public Account Notification Settings
+- External user notification preferences at /account/notifications
+- SMS opt-in with TCPA compliance language
+- Quiet hours for SMS and push notifications
+- Per-notification preferences for donor/volunteer notifications
+- Unsubscribe from all option
+
 ## Real-time Capabilities
 
 ### Live Activity Feeds
@@ -322,6 +339,19 @@ SMS notification service:
 - Case status updates
 - Donation confirmations
 - Bulk SMS support
+
+### @acts29/notification-service (packages/notification-service)
+Unified notification orchestration service:
+- Multi-channel notification delivery (email, SMS, push, in-app)
+- User preference management with caching
+- Channel availability checking
+- Quiet hours enforcement (suppress SMS/push during configured hours)
+- Notification queue with scheduled delivery
+- Retry logic with configurable attempts
+- Digest management (daily/weekly batching)
+- Built-in notification templates
+- Bulk notification sending with batching
+- Queue statistics and logging
 
 ### @acts29/automation-service (packages/automation-service)
 Zapier-style workflow automation:
@@ -470,6 +500,8 @@ pnpm test
 apps/web/app/
 ├── (public)/           # Public pages (grouped route)
 │   ├── page.tsx        # Homepage
+│   ├── account/        # User account pages
+│   │   └── notifications/  # Notification preferences
 │   ├── calendar/       # Public calendar
 │   │   └── subscribe/  # Calendar subscription page
 │   ├── prayer/         # Prayer requests
@@ -487,7 +519,8 @@ apps/web/app/
 │   ├── teams/          # Team management
 │   ├── users/          # User management
 │   └── settings/       # Settings
-│       ├── calendar/   # Calendar subscription management
+│       ├── calendar/       # Calendar subscription management
+│       ├── notifications/  # Notification preferences
 │       └── ...
 └── api/                # API routes
 ```

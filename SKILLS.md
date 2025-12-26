@@ -352,6 +352,22 @@ SMS notification service:
 - Case status updates
 - Donation confirmations
 - Bulk SMS support
+- SMS consent management (TCPA compliance):
+  - ConsentManager class for opt-in/opt-out tracking
+  - STOP/START/HELP keyword handling
+  - Consent history tracking
+  - TCPA disclosure text constants
+- Two-way SMS webhooks:
+  - TwilioWebhookHandler for incoming messages
+  - Twilio signature validation
+  - Built-in keyword handlers (YES, NO, CONFIRM, CANCEL, etc.)
+  - Context-aware response handling
+  - Custom keyword handler support
+- SMS conversations:
+  - Conversation threading per phone number
+  - Message history tracking
+  - Conversation context for multi-step flows
+  - Status tracking (active, waiting_response, closed)
 
 ### @acts29/notification-service (packages/notification-service)
 Unified notification orchestration service:

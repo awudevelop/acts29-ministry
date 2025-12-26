@@ -317,3 +317,55 @@ export {
   getCaseStatusUpdateMessage as caseStatusUpdateTemplate,
   getDonationConfirmationMessage as donationConfirmationTemplate,
 };
+
+// ============================================
+// SMS Consent Management (TCPA Compliance)
+// ============================================
+
+export {
+  // Types
+  type ConsentStatus,
+  type ConsentSource,
+  type SMSConsent,
+  type ConsentHistory,
+  type ConsentStore,
+  type ConsentManagerConfig,
+  // Constants
+  TCPA_DISCLOSURE,
+  TCPA_OPT_IN_CONFIRMATION,
+  TCPA_OPT_OUT_CONFIRMATION,
+  TCPA_HELP_RESPONSE,
+  TCPA_ALREADY_OPTED_OUT,
+  TCPA_ALREADY_OPTED_IN,
+  OPT_OUT_KEYWORDS,
+  OPT_IN_KEYWORDS,
+  HELP_KEYWORDS,
+  // Functions
+  parseKeywordType,
+  // Classes
+  ConsentManager,
+  InMemoryConsentStore,
+} from './consent';
+
+// ============================================
+// Two-Way SMS & Webhooks
+// ============================================
+
+export {
+  // Types
+  type TwilioIncomingMessage,
+  type TwilioStatusCallback,
+  type TwilioWebhookResponse,
+  type SMSConversation,
+  type SMSMessage,
+  type ConversationContext,
+  type KeywordHandler,
+  type KeywordConfig,
+  type WebhookHandlerConfig,
+  type ConversationStore,
+  // Constants
+  BUILT_IN_KEYWORDS,
+  // Classes
+  TwilioWebhookHandler,
+  InMemoryConversationStore,
+} from './webhooks';

@@ -442,27 +442,40 @@ Public and private calendar subscription feeds.
   - [x] Create Feed modal with type and content configuration
   - [x] Instructions for each calendar platform
 
-#### Phase 14E: Calendar Sync - Inbound (OAuth Integration)
+#### Phase 14E: Calendar Sync - Inbound (OAuth Integration) (Near Complete)
 Bidirectional sync with external calendar providers.
 
-- [ ] Google Calendar OAuth integration
-  - [ ] OAuth 2.0 consent flow
-  - [ ] Token storage and refresh
-  - [ ] Read events from user's calendar
-  - [ ] Write volunteer shifts to user's calendar
-  - [ ] Conflict detection (shift overlaps with user events)
-- [ ] Microsoft Outlook/365 integration
-  - [ ] Microsoft Graph API setup
-  - [ ] OAuth consent flow
-  - [ ] Calendar read/write operations
-- [ ] Apple Calendar (CalDAV)
+- [x] Google Calendar OAuth integration
+  - [x] GoogleCalendarOAuth class with OAuth 2.0 consent flow
+  - [x] Token storage and refresh
+  - [x] List user's calendars
+  - [x] Read events from user's calendar
+  - [x] Write events (shifts) to user's calendar
+  - [x] Delete events from user's calendar
+  - [x] Conflict detection (shift overlaps with user events)
+- [x] Microsoft Outlook/365 integration
+  - [x] MicrosoftCalendarOAuth class with Graph API
+  - [x] OAuth consent flow with multi-tenant support
+  - [x] List user's calendars
+  - [x] Calendar read/write operations
+  - [x] Token refresh handling
+- [ ] Apple Calendar (CalDAV) - Future
   - [ ] CalDAV client implementation
   - [ ] iCloud calendar support
-- [ ] Sync settings per user
-  - [ ] Connected calendars list
-  - [ ] Sync direction (one-way, two-way)
-  - [ ] Calendar selection for write-back
-  - [ ] Sync frequency options
+- [x] Sync management
+  - [x] CalendarSyncManager for unified provider handling
+  - [x] ConnectedCalendar type with sync settings
+  - [x] SyncSettings (direction, frequency, conflict detection)
+  - [x] CalendarStore interface with InMemoryCalendarStore
+  - [x] Automatic token refresh before expiry
+- [ ] API endpoints (to be implemented)
+  - [ ] /api/calendar/oauth/[provider]/authorize
+  - [ ] /api/calendar/oauth/[provider]/callback
+  - [ ] /api/calendar/connected - list/manage connected calendars
+- [ ] Admin UI (to be implemented)
+  - [ ] Connected calendars list page
+  - [ ] Connect calendar button with provider selection
+  - [ ] Sync settings per connected calendar
 
 #### Phase 14F: Unified Notification Center
 Central hub for all notification management.

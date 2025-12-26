@@ -19,3 +19,25 @@ export {
   type ICalShiftOptions,
   type ShiftCalendarOptions,
 } from './ical';
+
+// ============================================
+// Calendar OAuth Integration
+// ============================================
+
+export {
+  // Types
+  type CalendarProvider,
+  type OAuthTokens,
+  type ConnectedCalendar,
+  type CalendarInfo,
+  type SyncSettings,
+  type ExternalEvent,
+  type ConflictResult,
+  type OAuthConfig,
+  type CalendarStore,
+  // Classes
+  GoogleCalendarOAuth,
+  MicrosoftCalendarOAuth,
+  CalendarSyncManager,
+  InMemoryCalendarStore,
+} from './oauth';

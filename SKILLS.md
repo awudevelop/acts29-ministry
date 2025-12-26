@@ -320,6 +320,17 @@ iCalendar generation and subscription service:
 - Outlook/Office 365 integration URLs
 - Apple Calendar (webcal://) support
 - QR code support for mobile subscription
+- OAuth calendar integration:
+  - GoogleCalendarOAuth for Google Calendar API
+  - MicrosoftCalendarOAuth for Microsoft Graph API
+  - CalendarSyncManager for unified provider handling
+  - Token storage and automatic refresh
+  - List user's calendars
+  - Read events for conflict detection
+  - Write shifts to user's calendar
+  - Delete events from user's calendar
+  - ConnectedCalendar with sync settings
+  - Conflict detection (shift overlaps with user events)
 
 ### @acts29/email-service (packages/email-service)
 Email template and sending service:

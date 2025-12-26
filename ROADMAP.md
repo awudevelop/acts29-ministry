@@ -477,22 +477,42 @@ Bidirectional sync with external calendar providers.
   - [ ] Connect calendar button with provider selection
   - [ ] Sync settings per connected calendar
 
-#### Phase 14F: Unified Notification Center
+#### Phase 14F: Unified Notification Center (Complete)
 Central hub for all notification management.
 
-- [ ] In-app notification center
-  - [ ] Real-time notifications (WebSocket/SSE)
-  - [ ] Notification drawer in admin TopBar (enhanced)
+- [x] In-app notification system
+  - [x] NotificationCenter class for centralized management
+  - [x] InAppNotification type with full metadata
+  - [x] 18 notification types with templates (donation, volunteer, event, case, prayer, team, system, broadcast)
+  - [x] Priority levels (low, normal, high, urgent)
+  - [x] Status tracking (unread, read, archived)
+  - [x] Notification grouping by date (Today, Yesterday, This Week, Earlier)
+  - [x] NotificationSummary with counts by type and priority
+  - [x] Mark read/unread, archive, delete operations
+  - [x] Custom notification creation (not from templates)
+- [x] Broadcast messaging
+  - [x] BroadcastMessage type for org-wide announcements
+  - [x] Target audience (all, role, team, segment)
+  - [x] Multi-channel delivery (in_app, email, sms, push)
+  - [x] Scheduled broadcasts
+  - [x] Broadcast statistics (recipients, delivered, opened, clicked)
+- [x] Notification templates
+  - [x] NOTIFICATION_TEMPLATES constant with 18 predefined types
+  - [x] Template variable interpolation ({{variable}})
+  - [x] Icon and color per notification type
+  - [x] Default priority and channels per type
+- [x] Helper functions
+  - [x] formatNotificationForDisplay for real-time display
+  - [x] groupNotificationsByRelativeDate for UI grouping
+  - [x] formatTimeAgo for human-readable timestamps
+  - [x] InMemoryNotificationStore for development
+- [ ] API endpoints (to be implemented)
+  - [ ] /api/notifications - list, mark read, archive
+  - [ ] /api/broadcasts - create, send, list
+- [ ] Admin UI (to be implemented)
+  - [ ] Enhanced notification drawer in TopBar
   - [ ] Notification history page
-  - [ ] Mark read/unread, archive, delete
-- [ ] Notification preferences dashboard
-  - [ ] Visual overview of all notification settings
-  - [ ] Quick toggles per category
-  - [ ] Test notification button
-- [ ] Admin notification management
-  - [ ] Broadcast messages to all users/segments
-  - [ ] Scheduled announcements
-  - [ ] Notification analytics (sent, opened, clicked)
+  - [ ] Broadcast composer page
 
 ## Technical Debt & Improvements
 

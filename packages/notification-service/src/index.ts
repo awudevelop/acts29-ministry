@@ -767,3 +767,30 @@ export function clearQueue(): void {
 export function clearLogs(): void {
   notificationLogs.length = 0;
 }
+
+// ============================================
+// Unified Notification Center
+// ============================================
+
+export {
+  // Types
+  type NotificationType as InAppNotificationType,
+  type NotificationPriority,
+  type NotificationStatus as InAppNotificationStatus,
+  type InAppNotification,
+  type NotificationGroup,
+  type NotificationSummary,
+  type BroadcastMessage,
+  type NotificationTemplate as InAppNotificationTemplate,
+  type NotificationStore,
+  type NotificationCenterConfig,
+  type NotificationEvent,
+  // Constants
+  NOTIFICATION_TEMPLATES,
+  // Classes
+  NotificationCenter,
+  InMemoryNotificationStore,
+  // Functions
+  formatNotificationForDisplay,
+  groupNotificationsByRelativeDate,
+} from './notification-center';

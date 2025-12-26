@@ -392,6 +392,17 @@ Unified notification orchestration service:
 - Built-in notification templates
 - Bulk notification sending with batching
 - Queue statistics and logging
+- Unified Notification Center:
+  - NotificationCenter class for centralized management
+  - InAppNotification type with full metadata
+  - 18 notification types with templates and icons
+  - Priority levels (low, normal, high, urgent)
+  - Notification grouping by date
+  - NotificationSummary with counts
+  - Broadcast messaging to users/teams/segments
+  - Multi-channel broadcast delivery
+  - Scheduled broadcasts
+  - InMemoryNotificationStore for development
 
 ### @acts29/automation-service (packages/automation-service)
 Zapier-style workflow automation:

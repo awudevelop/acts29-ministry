@@ -349,7 +349,7 @@ User-controlled notification preferences and unified notification queue.
   - [x] Built-in notification templates
   - [x] Queue statistics and logging
 
-#### Phase 14B: Email Notifications Enhancement (Partial)
+#### Phase 14B: Email Notifications Enhancement (Near Complete)
 Expand email templates and automation triggers.
 
 - [x] New email templates
@@ -360,16 +360,22 @@ Expand email templates and automation triggers.
   - [x] Case status update - CaseUpdateEmail
   - [x] Prayer request received/update - PrayerReceivedEmail, PrayerUpdateEmail
   - [ ] Shelter check-in confirmation
-- [ ] Email automation integration
-  - [ ] Connect automation-service to email-service
-  - [ ] Template variable expansion ({{name}}, {{date}}, etc.)
+- [x] Email automation integration
+  - [x] Connect automation-service to email-service (EmailExecutor)
+  - [x] Template variable expansion ({{name}}, {{date}}, etc.)
+  - [x] Trigger data to template props mapping
+  - [x] Email service adapter interface
   - [ ] Scheduled email campaigns
   - [ ] A/B testing support (future)
-- [ ] Email analytics
-  - [ ] Open tracking
-  - [ ] Click tracking
-  - [ ] Bounce handling
-  - [ ] Delivery reports
+- [x] Email analytics
+  - [x] Email event types (sent, delivered, opened, clicked, bounced, etc.)
+  - [x] Email record tracking with full event history
+  - [x] Analytics summary calculation (totals, rates, by template, by day)
+  - [x] Template performance metrics (open rate, click rate, device breakdown)
+  - [x] Recipient engagement scoring (highly_engaged to inactive)
+  - [x] Resend webhook event processing
+  - [x] Dashboard analytics generation
+  - [ ] Webhook API endpoint for Resend events
 
 #### Phase 14C: SMS Notifications Enhancement
 Expand Twilio integration with two-way messaging.

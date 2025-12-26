@@ -334,6 +334,13 @@ Email template and sending service:
 - Case status update emails
 - Prayer request received/update emails
 - HTML email generation
+- Email analytics and tracking:
+  - Event tracking (sent, delivered, opened, clicked, bounced)
+  - Analytics summary calculation
+  - Template performance metrics
+  - Recipient engagement scoring
+  - Resend webhook event processing
+  - Dashboard analytics generation
 
 ### @acts29/sms-service (packages/sms-service)
 SMS notification service:
@@ -367,6 +374,11 @@ Zapier-style workflow automation:
 - Condition-based branching
 - Delay steps for drip campaigns
 - 15+ pre-built templates
+- Email executor integration:
+  - EmailExecutor class for automation email actions
+  - Trigger data to template props mapping
+  - 13 email template types supported
+  - Email service adapter interface for @acts29/email-service connection
 
 ## Data Models
 

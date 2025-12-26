@@ -59,13 +59,15 @@ export function VolunteerDigestEmail({
   period,
   stats,
   upcomingShifts,
-  recentActivity,
+  recentActivity: _recentActivity,
   opportunities,
   teamUpdates,
   dashboardUrl,
   signUpUrl,
   unsubscribeUrl,
 }: VolunteerDigestEmailProps) {
+  // Note: recentActivity is available in props for future use in activity feed section
+  void _recentActivity;
   const formatDate = (dateStr: string) =>
     new Date(dateStr).toLocaleDateString('en-US', {
       weekday: 'short',

@@ -199,7 +199,7 @@ export function PrayerUpdateEmail({
 }: PrayerUpdateEmailProps) {
   const getUpdateTitle = () => {
     switch (update.type) {
-      case 'praying': return 'We're Praying for You';
+      case 'praying': return "We're Praying for You";
       case 'answered': return 'Celebrating Answered Prayer! 🎉';
       case 'encouragement': return 'A Word of Encouragement';
       case 'follow_up': return 'Checking In on Your Prayer Request';

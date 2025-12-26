@@ -966,3 +966,18 @@ export function getActionsByCategory(): Record<string, Array<{ type: ActionType;
 
   return grouped;
 }
+
+// ============================================
+// Export Executors
+// ============================================
+
+export {
+  EmailExecutor,
+  type EmailExecutorConfig,
+  type EmailExecutorResult,
+  type EmailTemplateType,
+  type EmailServiceAdapter,
+  type OrganizationData,
+  createEmailServiceAdapter,
+  mapTriggerDataToTemplateProps,
+} from './executors/email-executor';

@@ -255,6 +255,28 @@ export {
 } from './templates/prayer-update';
 
 // ============================================
+// Email Analytics
+// ============================================
+
+export {
+  // Types
+  type EmailEventType,
+  type EmailEvent,
+  type EmailRecord,
+  type EmailAnalyticsSummary,
+  type TemplatePerformance,
+  type RecipientEngagement,
+  type ResendWebhookPayload,
+  type DashboardAnalytics,
+  // Functions
+  calculateAnalyticsSummary,
+  calculateTemplatePerformance,
+  calculateRecipientEngagement,
+  processWebhookEvent,
+  generateDashboardAnalytics,
+} from './analytics';
+
+// ============================================
 // Newsletter & Subscriber Management
 // ============================================
 

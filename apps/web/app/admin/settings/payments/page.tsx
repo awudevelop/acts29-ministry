@@ -22,8 +22,8 @@ export default function PaymentSettingsPage() {
     provider: 'hellopayments',
     api_key: '••••••••••••••••',
     default_fee_coverage: 'ask',
-    fee_percentage: '2.9',
-    fee_fixed: '0.30',
+    fee_percentage: '5.0',
+    fee_fixed: '0.00',
     currency: 'USD',
     test_mode: true,
   });

@@ -103,8 +103,8 @@ export function formatCurrency(
  */
 export function calculateTotalWithFeeCoverage(
   donationAmount: number,
-  feePercentage: number = 2.9,
-  fixedFee: number = 30
+  feePercentage: number = 5.0,
+  fixedFee: number = 0
 ): {
   donationAmount: number;
   feeAmount: number;

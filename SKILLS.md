@@ -327,6 +327,12 @@ Email template and sending service:
 - Newsletter templates
 - Annual statement generation
 - Resend API integration
+- Shift reminder emails (24h/2h before)
+- Event registration confirmation emails
+- Event reminder emails (24h/1h before)
+- Weekly/monthly volunteer digest emails
+- Case status update emails
+- Prayer request received/update emails
 - HTML email generation
 
 ### @acts29/sms-service (packages/sms-service)

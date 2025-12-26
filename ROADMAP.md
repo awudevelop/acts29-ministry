@@ -349,16 +349,16 @@ User-controlled notification preferences and unified notification queue.
   - [x] Built-in notification templates
   - [x] Queue statistics and logging
 
-#### Phase 14B: Email Notifications Enhancement
+#### Phase 14B: Email Notifications Enhancement (Partial)
 Expand email templates and automation triggers.
 
-- [ ] New email templates
-  - [ ] Shift reminder (24h, 2h before)
-  - [ ] Event registration confirmation
-  - [ ] Event reminder (24h, 1h before)
-  - [ ] Weekly volunteer digest
-  - [ ] Case status update
-  - [ ] Prayer request update (new prayers, answered)
+- [x] New email templates
+  - [x] Shift reminder (24h, 2h before) - ShiftReminderEmail
+  - [x] Event registration confirmation - EventRegistrationEmail
+  - [x] Event reminder (24h, 1h before) - EventReminderEmail
+  - [x] Weekly/monthly volunteer digest - VolunteerDigestEmail
+  - [x] Case status update - CaseUpdateEmail
+  - [x] Prayer request received/update - PrayerReceivedEmail, PrayerUpdateEmail
   - [ ] Shelter check-in confirmation
 - [ ] Email automation integration
   - [ ] Connect automation-service to email-service

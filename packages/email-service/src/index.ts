@@ -220,9 +220,39 @@ export {
   getWelcomeEmailText,
   DonorUpdateEmail,
   getDonorUpdateEmailText,
+  EventReminderEmail as NewsletterEventReminderEmail,
+  getEventReminderEmailText as getNewsletterEventReminderEmailText,
+} from './templates/newsletter';
+
+// New notification email templates
+export {
+  ShiftReminderEmail,
+  getShiftReminderEmailText,
+} from './templates/shift-reminder';
+
+export {
+  EventRegistrationEmail,
+  getEventRegistrationEmailText,
   EventReminderEmail,
   getEventReminderEmailText,
-} from './templates/newsletter';
+} from './templates/event-emails';
+
+export {
+  VolunteerDigestEmail,
+  getVolunteerDigestEmailText,
+} from './templates/volunteer-digest';
+
+export {
+  CaseUpdateEmail,
+  getCaseUpdateEmailText,
+} from './templates/case-update';
+
+export {
+  PrayerReceivedEmail,
+  getPrayerReceivedEmailText,
+  PrayerUpdateEmail,
+  getPrayerUpdateEmailText,
+} from './templates/prayer-update';
 
 // ============================================
 // Newsletter & Subscriber Management
